@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yaowendao.com/"/>
-  <updated>2018-06-02T07:34:06.855Z</updated>
+  <updated>2019-03-24T16:10:08.942Z</updated>
   <id>http://www.yaowendao.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CVE-2019-6446 浅析</title>
+    <link href="http://www.yaowendao.com/2019/03/24/CVE-2019-6446%E6%B5%85%E6%9E%90/"/>
+    <id>http://www.yaowendao.com/2019/03/24/CVE-2019-6446浅析/</id>
+    <published>2019-03-23T16:00:00.000Z</published>
+    <updated>2019-03-24T16:10:08.942Z</updated>
+    
+    <content type="html"><![CDATA[<p>来源：<a href="https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p><h2 id="python-的反序列化"><a href="#python-的反序列化" class="headerlink" title="python 的反序列化"></a>python 的反序列化</h2><p>反序列化漏洞通常需要两个条件：</p><p><strong> 1、用户可控的反序列化入口 </strong></p><p>例如 <code>PHP</code> 的 <code>unserialize()</code>、<code>Java</code> 的 <code>readObject()</code> 。 </p><p><strong> 2、运行环境中存在调用了危险函数的 magic function </strong></p><p>例如 <code>PHP</code> 的 <code>__wakup()</code>、 <code>__destruct()</code> 以及 <code>Java</code> 的 <code>readObject()</code>。</p><p>满足这两个条件的前提下，我们构造第二个条件的对象（也就是 <code>Gadget</code>），并将其序列化后传递给第一个条件的入口，就可以成功触发反序列化漏洞了。</p><p>相对而言，第二个条件的利用更难，所以就诞生了 <code>ysoserial</code> 和 <code>marshalsec</code> 这样的 Gadget 生成器。</p><p>不过，对于 <code>python</code> 而言，反序列化漏洞的利用就简单多了，因为，<code>python</code> 的反序列化<code>Gadget</code>不需要存在于原有的运行环境中，而是可以通过序列化数据直接传递。</p><p>看个例子。</p><p><img src="/image/01-numpy-write.png" alt="01-write"></p><p>代码将Test类的对象序列化到<code>payload</code>文件中，其中在 magic function <code>reduce()</code> 中注入了恶意命令 <code>ls</code> 。接下来是反序列化。</p><p><img src="/image/02-numpy-read.png" alt="02-read"></p><p>看看结果。</p><p><img src="/image/03-numpy-result.png" alt="03-result"></p><p>可以看到，序列化到 <code>payload</code> 中的命令 <code>ls</code> 被成功地执行了。</p><p>因此，<code>python</code> 的反序列化漏洞利用，只需要满足第一个条件“用户可控的反序列化入口”就好了。</p><h2 id="CVE-2019-6446"><a href="#CVE-2019-6446" class="headerlink" title="CVE-2019-6446"></a>CVE-2019-6446</h2><p>现在来看看 <code>numpy</code> 的这个 CVE。<code>numpy</code> 是非常流行的用于科学计算的<code>python</code>开源库，包括<code>TensorFlow</code>在内的许多项目都使用了 <code>numpy</code>。</p><p><code>numpy</code> 提供了一个接口 <code>numpy.load()</code>，定义长这样：</p><p><img src="/image/04-numpy-load.png" alt="04-load"></p><p>函数里首先打开 <code>file</code> 文件，赋值给 <code>fid</code></p><p><img src="/image/05-numpy-load-file.png" alt="05-file"></p><p>随后判断文件头。当文件头既不满足 <code>zip</code> 格式也不满足 <code>numpy</code> 格式时，<code>numpy</code> 直接做了一个操作：反序列化。</p><p><img src="/image/06-numpy-pickle.png" alt="06-pickle"></p><p>也就是说，只要我们将恶意的序列化内容传递给 <code>numpy.load()</code> 函数，就可以触发这个漏洞。</p><p><img src="/image/07-numpy-read.png" alt="07-numpy-read"></p><p>运行结果是：</p><p><img src="/image/08-numpy-run.png" alt="08-numpy-run"></p><p>成功执行了在序列化文件 <code>payload</code> 中注入的 <code>ls</code> 命令。</p><h2 id="如何预防"><a href="#如何预防" class="headerlink" title="如何预防"></a>如何预防</h2><p>首先，一个通用的原则：不要对不可信的数据进行反序列化。</p><p>其次，就 <code>numpy</code> 的这个 CVE 而言，可以注意到在进行反序列化之前有一个判断：<code>allow_pickle</code>。</p><p><img src="/image/09-numpy-allowpickle.png" alt="09-allowpickle"></p><p><code>allow_pickle</code> 其实是 <code>numpy.load()</code> 的第二个参数，默认为<code>True</code>。</p><p><img src="/image/10-numpy-allowpickle-true.png" alt="10-allowpickle"></p><p>只要在调用 <code>numpy.load()</code> 的时候，将 <code>allow_pickle</code> 置为 <code>False</code> 就可以避免反序列化操作了。</p><p><img src="/image/11-numpy-allowpickle-false.png" alt="11-allowpickle-false"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;来源：&lt;a href=&quot;https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;香依香偎@闻道解惑&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;python-的反序列化&quot;&gt;&lt;a 
+      
+    
+    </summary>
+    
+    
+      <category term="numpy" scheme="http://www.yaowendao.com/tags/numpy/"/>
+    
+      <category term="CVE-2019-6446" scheme="http://www.yaowendao.com/tags/CVE-2019-6446/"/>
+    
+  </entry>
   
   <entry>
     <title>Mozilla Rhino 反序列化漏洞 POC 分析</title>
