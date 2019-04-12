@@ -90,7 +90,7 @@
 <meta property="og:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.yaowendao.com/image/01-cheating-ida-strcmp.png">
-<meta property="og:image" content="http://www.yaowendao.com/images/02-cheating-ida-puts.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/02-cheating-ida-puts.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/03-cheating-readelf-r.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/04-cheating-readelf-S.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/05-cheating-f91.png">
@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/25-cheating-got-printf.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/26-cheating-call-system.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/27-cheating-getshell.png">
-<meta property="og:updated_time" content="2019-04-12T07:24:06.343Z">
+<meta property="og:updated_time" content="2019-04-12T07:35:00.261Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="格式化字符串漏洞攻击实战">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
@@ -348,7 +348,7 @@
 <p><a href="/image/cheating">cheating</a> 是 <strong>CTF</strong> 里的一道 <strong>PWN</strong> 题。主要攻击点就在于格式化字符串漏洞的利用。</p>
 <h2 id="一、陷阱"><a href="#一、陷阱" class="headerlink" title="一、陷阱"></a>一、陷阱</h2><p>题目中布置了一个陷阱。如果用 <strong>IDA 6.8</strong> 来分析就很容易陷入陷阱，用 <strong>IDA 7.0</strong> 分析就会发现一些不一样的地方。</p>
 <p><img src="/image/01-cheating-ida-strcmp.png" alt="IDA-strcmp"></p>
-<p><img src="/images/02-cheating-ida-puts.png" alt="IDA-puts"></p>
+<p><img src="/image/02-cheating-ida-puts.png" alt="IDA-puts"></p>
 <p>可以发现，IDA 6.8 识别出的 <strong>strcmp、puts</strong> 被 IDA 7.0 识别为了 <strong>strncmp、printf</strong>。用 <strong>readelf -r</strong> 查看，和 <strong>IDA 6.8</strong> 的结果一致。</p>
 <p><img src="/image/03-cheating-readelf-r.png" alt="readelf-r"></p>
 <p>为什么 <strong>IDA 6.8</strong> 和 <strong>readelf</strong> 会显示出错误的库函数？原因在于 <strong>cheating</strong> 文件中的 <strong>.dynstr section</strong> 进行了特殊处理，布置了一个陷阱。用 <strong>readelf -S</strong> 看下。</p>
