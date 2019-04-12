@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-64x64-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="格式化字符串漏洞,printf,puts," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="闻道解惑" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
+<meta name="keywords" content="格式化字符串漏洞,printf,puts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞攻击实战">
+<meta property="og:url" content="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/index.html">
+<meta property="og:site_name" content="闻道解惑">
+<meta property="og:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.yaowendao.com/image/01-cheating-ida-strcmp.png">
+<meta property="og:image" content="http://www.yaowendao.com/images/02-cheating-ida-puts.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/03-cheating-readelf-r.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/04-cheating-readelf-S.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/05-cheating-f91.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/06-cheating-490.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/07-cheating-400490.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/01-cheating-checksec.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/08-cheating-main.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/09-cheating-validating.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/10-cheating-retry.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/11-cheating-retry-succ.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/08-cheating-main.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/12-cheating-sections.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/13-cheating-change-exit.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/15-cheating-exit-got.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/16-cheating-plt.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/14-cheating-exit-change.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/17-cheating-repeat2main.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/18-cheating-repeat-succ.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/19-cheating-got.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/20-cheating-readaddr.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/21-cheating-calc-system.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/22-cheating-leak-succ.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/24-cheating-init.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/23-cheating-400BC0-func.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/25-cheating-got-printf.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/26-cheating-call-system.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/27-cheating-getshell.png">
+<meta property="og:updated_time" content="2019-04-12T07:03:11.034Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="格式化字符串漏洞攻击实战">
+<meta name="twitter:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
+<meta name="twitter:image" content="http://www.yaowendao.com/image/01-cheating-ida-strcmp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/"/>
+
+
+
+
+
+  <title>格式化字符串漏洞攻击实战 | 闻道解惑</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闻道解惑</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="香依香偎">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/image/0.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闻道解惑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">格式化字符串漏洞攻击实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T00:00:00+08:00">
+                2018-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>来源：<a href="https://mp.weixin.qq.com/s/" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><a href="/image/cheating">cheating</a> 是 <strong>CTF</strong> 里的一道 <strong>PWN</strong> 题。主要攻击点就在于格式化字符串漏洞的利用。</p>
+<h2 id="一、陷阱"><a href="#一、陷阱" class="headerlink" title="一、陷阱"></a>一、陷阱</h2><p>题目中布置了一个陷阱。如果用 <strong>IDA 6.8</strong> 来分析就很容易陷入陷阱，用 <strong>IDA 7.0</strong> 分析就会发现一些不一样的地方。</p>
+<p><img src="/image/01-cheating-ida-strcmp.png" alt="IDA-strcmp"></p>
+<p><img src="/images/02-cheating-ida-puts.png" alt="IDA-puts"></p>
+<p>可以发现，IDA 6.8 识别出的 <strong>strcmp、puts</strong> 被 IDA 7.0 识别为了 <strong>strncmp、printf</strong>。用 <strong>readelf -r</strong> 查看，和 <strong>IDA 6.8</strong> 的结果一致。</p>
+<p><img src="/image/03-cheating-readelf-r.png" alt="readelf-r"></p>
+<p>为什么 <strong>IDA 6.8</strong> 和 <strong>readelf</strong> 会显示出错误的库函数？原因在于 <strong>cheating</strong> 文件中的 <strong>.dynstr section</strong> 进行了特殊处理，布置了一个陷阱。用 <strong>readelf -S</strong> 看下。</p>
+<p><img src="/image/04-cheating-readelf-S.png" alt="readelf-S"></p>
+<p>可以看出，<strong>cheating</strong> 文件的 <strong>.dynstr</strong> 需要被加载到内存的 <strong>0x400490</strong> 地址，对应在文件中的 offset 为 <strong>0xf91</strong>。看下这个 <strong>string table</strong> 的内容。</p>
+<p><img src="/image/05-cheating-f91.png" alt="dynstr"></p>
+<p>这个 <strong>string table</strong> 写的确实是 <strong>strcmp</strong> 和 <strong>puts</strong>。如果仔细看一下，可以发现这两个函数名后面都有多余的0x00。</p>
+<p>但事实上，加载 <strong>ELF</strong> 文件时，并不会加载 <strong>0xF91</strong> 的 <strong>string table</strong>，而是会加载位于 <strong>0x490</strong> 位置的 <strong>string table</strong>，这里才是对应 <strong>.dynstr</strong> 目标地址 <strong>0x400490</strong> 的真命天子 。</p>
+<p><img src="/image/06-cheating-490.png" alt="490">  </p>
+<p><img src="/image/07-cheating-400490.png" alt="400490"></p>
+<p>好了，现在我们知道，可以关掉被误导的 <strong>IDA 6.8</strong>，继续用 <strong>IDA 7.0</strong> 来分析程序吧。</p>
+<h2 id="二、主流程和-sub-400ACC-的输入检查"><a href="#二、主流程和-sub-400ACC-的输入检查" class="headerlink" title="二、主流程和 sub_400ACC() 的输入检查"></a>二、主流程和 <strong>sub_400ACC()</strong> 的输入检查</h2><p>首先看一下防御情况。</p>
+<p><img src="/image/01-cheating-checksec.png" alt="checksec"></p>
+<p><strong>cheating</strong> 的主函数 <strong>sub_400BC0()</strong> 如下，主要逻辑是：</p>
+<p><img src="/image/08-cheating-main.png" alt="main"></p>
+<ul>
+<li>1、调用 <strong>sub_400ACC()</strong> 进行输入检查  <ul>
+<li>1.1、如果检查不通过，输出 “bye\n”  </li>
+<li>1.2、如果检查通过，接收用户输入并传递给 <strong> printf</strong> 输出，触发格式化字符串漏洞  </li>
+</ul>
+</li>
+<li>2、输出bye并退出  </li>
+</ul>
+<p>如果要触发格式化字符串漏洞，首先需要通过 <strong>sub_400ACC()</strong> 的检查。看一下这个检查函数。</p>
+<p><img src="/image/09-cheating-validating.png" alt="validation"></p>
+<p>主要逻辑是：</p>
+<ul>
+<li>1、生成一个64字节的字符串，其中前十个字节固定为 <strong>“cheating U”</strong>， 后54个字节为0-9随机字符。  </li>
+<li>2、用户输入字符串，与这个随机字符串进行 <strong>strncmp</strong>，相同则检查通过。</li>
+</ul>
+<p>处理了陷阱之后，我们会发现这里的检查函数用的是 <strong>strncmp</strong>，只比较了十一个字节。排除掉固定前缀 <strong>cheating U</strong> 的十个字节，也就只剩下一个字节，范围在 <strong>0-9</strong>。我们选定一个值（比如0），进行多次碰撞就可以了。如果没有识别出陷阱，把这里误以为是 <strong>strcmp</strong>，发现必须碰撞54个字节的随机值，就只能一头雾水地发呆啦。</p>
+<p><img src="/image/10-cheating-retry.png" alt="retry-validation"></p>
+<p><img src="/image/11-cheating-retry-succ.png" alt="retry-success"></p>
+<h2 id="三、格式化字符串漏洞"><a href="#三、格式化字符串漏洞" class="headerlink" title="三、格式化字符串漏洞"></a>三、格式化字符串漏洞</h2><p>通过校验之后，回到主函数 <strong>sub_400BC0()</strong> 的 <strong>if</strong> 分支内，这里是很明显的格式化字符串漏洞。</p>
+<p><img src="/image/08-cheating-main.png" alt="main"></p>
+<p>标准做法，分三步来实现 <code>get shell</code>：</p>
+<ul>
+<li>解决程序的退出问题  </li>
+<li>泄漏 <strong>system</strong> 和 <strong>/bin/sh</strong> 的地址  </li>
+<li>执行 <strong>sytem(“/bin/sh”)</strong>，<strong>get shell</strong>  </li>
+</ul>
+<h3 id="3-1-程序退出问题"><a href="#3-1-程序退出问题" class="headerlink" title="3.1 程序退出问题"></a>3.1 程序退出问题</h3><p>很显然，<strong>printf</strong> 执行完成之后，程序就不再接收用户输入，而是继续执行并且退出。我们需要让程序不退出，而是重新回到触发格式化字符串漏洞的地方，以便于进一步的利用。</p>
+<p>因此，我们需要找一个地址来改写，修改代码流程。看一下程序段，发现代码段是不能修改的，不过可以修改got表。</p>
+<p><img src="/image/12-cheating-sections.png" alt="sections"></p>
+<p>很容易想到，把 <strong>exit</strong> 的 <strong>got</strong> 表地址改掉，改到 <strong>if</strong> 分支里，就可以在调用 <strong>exit</strong> 的时候回到主流程中。</p>
+<p><img src="/image/13-cheating-change-exit.png" alt="exit-change"></p>
+<p><strong>exit</strong> 的 <strong>got</strong> 表地址是 <strong>0x602078</strong>，默认值是 <strong>plt</strong> 表中 <strong>exit</strong> 表项中jmp指令的下一条指令地址 <strong>0x400846</strong>，我们要将这个值，修改为目标地址 <strong>0x400BE9</strong>。也就是说，需要修改两个字节，将 <strong>0x602078</strong>地址的两个字节修改为 <strong>0xBE9</strong>。</p>
+<p><img src="/image/15-cheating-exit-got.png" alt="exit-got"></p>
+<p><img src="/image/16-cheating-plt.png" alt="exit-plt"></p>
+<p><img src="/image/14-cheating-exit-change.png" alt="exit-change-addr"></p>
+<p>所以，我们构造如下代码。</p>
+<p><img src="/image/17-cheating-repeat2main.png" alt="repeat2main"></p>
+<p>成功将代码流程转回了 <strong>if</strong> 分支内输入 <strong>slogan</strong> 的地方，可以进入下一步攻击了。</p>
+<p><img src="/image/18-cheating-repeat-succ.png" alt="repeat2main_succ"></p>
+<p>需要注意的是，我们将 <strong>exit()</strong> 的 <strong>got</strong> 地址修改为 <strong>0x400BE9</strong> 之后，实际上是通过一次 <strong>call</strong> 指令<br>重入了当前函数，也就意味着栈被抬高了一层（<strong>call</strong> 指令用于保存函数返回地址）。后续继续使用 <strong>printf</strong> 的格式化字符串漏洞时，每次都会多偏移一个参数。</p>
+<h3 id="3-2-泄漏-system-和-bin-sh-的地址"><a href="#3-2-泄漏-system-和-bin-sh-的地址" class="headerlink" title="3.2 泄漏 system 和 /bin/sh 的地址"></a>3.2 泄漏 <strong>system</strong> 和 <strong>/bin/sh</strong> 的地址</h3><p>要 <strong>get shell</strong>，我们需要泄漏出 <strong>glibc</strong> 中 <strong>system()</strong> 和 <strong>/bin/sh</strong> 的地址。在环境提供了 <strong>libc.so.6</strong> 文件的条件下，我们只需要泄漏出任何一个库函数的地址，都可以通过文件中的偏移来计算出我们想要的符号地址。</p>
+<p>看一下 <strong>got</strong> 表，我们选择 <strong>read</strong> 函数来泄漏地址。为什么选择 <strong>read</strong>？回看一下主函数，在存在漏洞的 <strong>printf</strong> 函数执行前，<strong>read</strong> 函数已经被调用了，所以此时 <strong>got</strong> 表中 <strong>read</strong> 函数的表项中已经保存了它在 <strong>glibc</strong> 库中的真实地址。</p>
+<p><img src="/image/19-cheating-got.png" alt="got"></p>
+<p>也就是说，我们需要泄漏出 <strong>0x602050</strong> 地址的内容。用 <strong>“%8$s”</strong> 就好了。</p>
+<p><img src="/image/20-cheating-readaddr.png" alt="read_addr"></p>
+<p><img src="/image/21-cheating-calc-system.png" alt="calc_system"></p>
+<p>成功获取到 <strong>system</strong> 和 <strong>/bin/sh</strong> 的内存地址！</p>
+<p><img src="/image/22-cheating-leak-succ.png" alt="leak-succ"></p>
+<h3 id="3-3-执行-sytem-“-bin-sh”-，get-shell"><a href="#3-3-执行-sytem-“-bin-sh”-，get-shell" class="headerlink" title="3.3 执行 sytem(“/bin/sh”)，get shell"></a>3.3 执行 <strong>sytem(“/bin/sh”)</strong>，<strong>get shell</strong></h3><p>我们已经拿到 <strong>system</strong> 的地址，还有任意地址写的漏洞，也能布置栈空间。接下来就是看怎样调用 <strong>system(“/bin/sh”)</strong> 最方便了。</p>
+<p>有很多方法可以实现这一步。最常用的方法是，利用 <strong>x64</strong> 程序的万能 <strong>gadget</strong>：<strong>init()</strong>函数，通过 <strong>ROP</strong> 来实现。</p>
+<p><img src="/image/24-cheating-init.png" alt="init-func"></p>
+<p>有没有更轻松的方法呢？回头看一眼主函数，发现 <strong>printf</strong> 的入参就是用户输入的 <strong>buf</strong>。这就意味着，只要我们把 <strong>printf</strong> 的 <strong>got</strong> 表改成 <strong>system</strong> 的地址，下一轮迭代时再发送 <strong>“/bin/sh”</strong> 的字符串，就可以直接执行 <strong>system(“/bin/sh”)</strong> 了，很简单是不是：）</p>
+<p><img src="/image/23-cheating-400BC0-func.png" alt="400BC0"></p>
+<p>查一下 <strong>got</strong> 表。<strong>printf</strong> 的地址是 <strong>0x602030</strong>，我们的目标是将这个地址的内容改写为前面获取到的 <strong>system</strong> 函数的真实地址。</p>
+<p><img src="/image/25-cheating-got-printf.png" alt="got-printf"></p>
+<p>攻击脚本如下：</p>
+<p><img src="/image/26-cheating-call-system.png" alt="call-system"></p>
+<p><strong>Get Shell</strong> 成功！</p>
+<p><img src="/image/27-cheating-getshell.png" alt="get-shell"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/格式化字符串漏洞/" rel="tag"># 格式化字符串漏洞</a>
+          
+            <a href="/tags/printf/" rel="tag"># printf</a>
+          
+            <a href="/tags/puts/" rel="tag"># puts</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/" rel="next" title="Mozilla Rhino 反序列化漏洞 POC 分析">
+                <i class="fa fa-chevron-left"></i> Mozilla Rhino 反序列化漏洞 POC 分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/24/CVE-2019-6446浅析/" rel="prev" title="CVE-2019-6446 浅析">
+                CVE-2019-6446 浅析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/image/0.jpeg"
+                alt="香依香偎" />
+            
+              <p class="site-author-name" itemprop="name">香依香偎</p>
+              <p class="site-description motion-element" itemprop="description">闻道解惑, 香依香偎</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yaojieno1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaojieno1@hotmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/gigabyte" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、陷阱"><span class="nav-number">1.</span> <span class="nav-text">一、陷阱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、主流程和-sub-400ACC-的输入检查"><span class="nav-number">2.</span> <span class="nav-text">二、主流程和 sub_400ACC() 的输入检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、格式化字符串漏洞"><span class="nav-number">3.</span> <span class="nav-text">三、格式化字符串漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-程序退出问题"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 程序退出问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-泄漏-system-和-bin-sh-的地址"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 泄漏 system 和 /bin/sh 的地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-执行-sytem-“-bin-sh”-，get-shell"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 执行 sytem(“/bin/sh”)，get shell</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">香依香偎</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

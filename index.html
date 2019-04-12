@@ -400,6 +400,204 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="香依香偎">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/image/0.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闻道解惑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/09/格式化字符串漏洞攻击实战/" itemprop="url">格式化字符串漏洞攻击实战</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T00:00:00+08:00">
+                2018-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>来源：<a href="https://mp.weixin.qq.com/s/" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><a href="/image/cheating">cheating</a> 是 <strong>CTF</strong> 里的一道 <strong>PWN</strong> 题。主要攻击点就在于格式化字符串漏洞的利用。</p>
+<h2 id="一、陷阱"><a href="#一、陷阱" class="headerlink" title="一、陷阱"></a>一、陷阱</h2><p>题目中布置了一个陷阱。如果用 <strong>IDA 6.8</strong> 来分析就很容易陷入陷阱，用 <strong>IDA 7.0</strong> 分析就会发现一些不一样的地方。</p>
+<p><img src="/image/01-cheating-ida-strcmp.png" alt="IDA-strcmp"></p>
+<p><img src="/images/02-cheating-ida-puts.png" alt="IDA-puts"></p>
+<p>可以发现，IDA 6.8 识别出的 <strong>strcmp、puts</strong> 被 IDA 7.0 识别为了 <strong>strncmp、printf</strong>。用 <strong>readelf -r</strong> 查看，和 <strong>IDA 6.8</strong> 的结果一致。</p>
+<p><img src="/image/03-cheating-readelf-r.png" alt="readelf-r"></p>
+<p>为什么 <strong>IDA 6.8</strong> 和 <strong>readelf</strong> 会显示出错误的库函数？原因在于 <strong>cheating</strong> 文件中的 <strong>.dynstr section</strong> 进行了特殊处理，布置了一个陷阱。用 <strong>readelf -S</strong> 看下。</p>
+<p><img src="/image/04-cheating-readelf-S.png" alt="readelf-S"></p>
+<p>可以看出，<strong>cheating</strong> 文件的 <strong>.dynstr</strong> 需要被加载到内存的 <strong>0x400490</strong> 地址，对应在文件中的 offset 为 <strong>0xf91</strong>。看下这个 <strong>string table</strong> 的内容。</p>
+<p><img src="/image/05-cheating-f91.png" alt="dynstr"></p>
+<p>这个 <strong>string table</strong> 写的确实是 <strong>strcmp</strong> 和 <strong>puts</strong>。如果仔细看一下，可以发现这两个函数名后面都有多余的0x00。</p>
+<p>但事实上，加载 <strong>ELF</strong> 文件时，并不会加载 <strong>0xF91</strong> 的 <strong>string table</strong>，而是会加载位于 <strong>0x490</strong> 位置的 <strong>string table</strong>，这里才是对应 <strong>.dynstr</strong> 目标地址 <strong>0x400490</strong> 的真命天子 。</p>
+<p><img src="/image/06-cheating-490.png" alt="490">  </p>
+<p><img src="/image/07-cheating-400490.png" alt="400490"></p>
+<p>好了，现在我们知道，可以关掉被误导的 <strong>IDA 6.8</strong>，继续用 <strong>IDA 7.0</strong> 来分析程序吧。</p>
+<h2 id="二、主流程和-sub-400ACC-的输入检查"><a href="#二、主流程和-sub-400ACC-的输入检查" class="headerlink" title="二、主流程和 sub_400ACC() 的输入检查"></a>二、主流程和 <strong>sub_400ACC()</strong> 的输入检查</h2><p>首先看一下防御情况。</p>
+<p><img src="/image/01-cheating-checksec.png" alt="checksec"></p>
+<p><strong>cheating</strong> 的主函数 <strong>sub_400BC0()</strong> 如下，主要逻辑是：</p>
+<p><img src="/image/08-cheating-main.png" alt="main"></p>
+<ul>
+<li>1、调用 <strong>sub_400ACC()</strong> 进行输入检查  <ul>
+<li>1.1、如果检查不通过，输出 “bye\n”  </li>
+<li>1.2、如果检查通过，接收用户输入并传递给 <strong> printf</strong> 输出，触发格式化字符串漏洞  </li>
+</ul>
+</li>
+<li>2、输出bye并退出  </li>
+</ul>
+<p>如果要触发格式化字符串漏洞，首先需要通过 <strong>sub_400ACC()</strong> 的检查。看一下这个检查函数。</p>
+<p><img src="/image/09-cheating-validating.png" alt="validation"></p>
+<p>主要逻辑是：</p>
+<ul>
+<li>1、生成一个64字节的字符串，其中前十个字节固定为 <strong>“cheating U”</strong>， 后54个字节为0-9随机字符。  </li>
+<li>2、用户输入字符串，与这个随机字符串进行 <strong>strncmp</strong>，相同则检查通过。</li>
+</ul>
+<p>处理了陷阱之后，我们会发现这里的检查函数用的是 <strong>strncmp</strong>，只比较了十一个字节。排除掉固定前缀 <strong>cheating U</strong> 的十个字节，也就只剩下一个字节，范围在 <strong>0-9</strong>。我们选定一个值（比如0），进行多次碰撞就可以了。如果没有识别出陷阱，把这里误以为是 <strong>strcmp</strong>，发现必须碰撞54个字节的随机值，就只能一头雾水地发呆啦。</p>
+<p><img src="/image/10-cheating-retry.png" alt="retry-validation"></p>
+<p><img src="/image/11-cheating-retry-succ.png" alt="retry-success"></p>
+<h2 id="三、格式化字符串漏洞"><a href="#三、格式化字符串漏洞" class="headerlink" title="三、格式化字符串漏洞"></a>三、格式化字符串漏洞</h2><p>通过校验之后，回到主函数 <strong>sub_400BC0()</strong> 的 <strong>if</strong> 分支内，这里是很明显的格式化字符串漏洞。</p>
+<p><img src="/image/08-cheating-main.png" alt="main"></p>
+<p>标准做法，分三步来实现 <code>get shell</code>：</p>
+<ul>
+<li>解决程序的退出问题  </li>
+<li>泄漏 <strong>system</strong> 和 <strong>/bin/sh</strong> 的地址  </li>
+<li>执行 <strong>sytem(“/bin/sh”)</strong>，<strong>get shell</strong>  </li>
+</ul>
+<h3 id="3-1-程序退出问题"><a href="#3-1-程序退出问题" class="headerlink" title="3.1 程序退出问题"></a>3.1 程序退出问题</h3><p>很显然，<strong>printf</strong> 执行完成之后，程序就不再接收用户输入，而是继续执行并且退出。我们需要让程序不退出，而是重新回到触发格式化字符串漏洞的地方，以便于进一步的利用。</p>
+<p>因此，我们需要找一个地址来改写，修改代码流程。看一下程序段，发现代码段是不能修改的，不过可以修改got表。</p>
+<p><img src="/image/12-cheating-sections.png" alt="sections"></p>
+<p>很容易想到，把 <strong>exit</strong> 的 <strong>got</strong> 表地址改掉，改到 <strong>if</strong> 分支里，就可以在调用 <strong>exit</strong> 的时候回到主流程中。</p>
+<p><img src="/image/13-cheating-change-exit.png" alt="exit-change"></p>
+<p><strong>exit</strong> 的 <strong>got</strong> 表地址是 <strong>0x602078</strong>，默认值是 <strong>plt</strong> 表中 <strong>exit</strong> 表项中jmp指令的下一条指令地址 <strong>0x400846</strong>，我们要将这个值，修改为目标地址 <strong>0x400BE9</strong>。也就是说，需要修改两个字节，将 <strong>0x602078</strong>地址的两个字节修改为 <strong>0xBE9</strong>。</p>
+<p><img src="/image/15-cheating-exit-got.png" alt="exit-got"></p>
+<p><img src="/image/16-cheating-plt.png" alt="exit-plt"></p>
+<p><img src="/image/14-cheating-exit-change.png" alt="exit-change-addr"></p>
+<p>所以，我们构造如下代码。</p>
+<p><img src="/image/17-cheating-repeat2main.png" alt="repeat2main"></p>
+<p>成功将代码流程转回了 <strong>if</strong> 分支内输入 <strong>slogan</strong> 的地方，可以进入下一步攻击了。</p>
+<p><img src="/image/18-cheating-repeat-succ.png" alt="repeat2main_succ"></p>
+<p>需要注意的是，我们将 <strong>exit()</strong> 的 <strong>got</strong> 地址修改为 <strong>0x400BE9</strong> 之后，实际上是通过一次 <strong>call</strong> 指令<br>重入了当前函数，也就意味着栈被抬高了一层（<strong>call</strong> 指令用于保存函数返回地址）。后续继续使用 <strong>printf</strong> 的格式化字符串漏洞时，每次都会多偏移一个参数。</p>
+<h3 id="3-2-泄漏-system-和-bin-sh-的地址"><a href="#3-2-泄漏-system-和-bin-sh-的地址" class="headerlink" title="3.2 泄漏 system 和 /bin/sh 的地址"></a>3.2 泄漏 <strong>system</strong> 和 <strong>/bin/sh</strong> 的地址</h3><p>要 <strong>get shell</strong>，我们需要泄漏出 <strong>glibc</strong> 中 <strong>system()</strong> 和 <strong>/bin/sh</strong> 的地址。在环境提供了 <strong>libc.so.6</strong> 文件的条件下，我们只需要泄漏出任何一个库函数的地址，都可以通过文件中的偏移来计算出我们想要的符号地址。</p>
+<p>看一下 <strong>got</strong> 表，我们选择 <strong>read</strong> 函数来泄漏地址。为什么选择 <strong>read</strong>？回看一下主函数，在存在漏洞的 <strong>printf</strong> 函数执行前，<strong>read</strong> 函数已经被调用了，所以此时 <strong>got</strong> 表中 <strong>read</strong> 函数的表项中已经保存了它在 <strong>glibc</strong> 库中的真实地址。</p>
+<p><img src="/image/19-cheating-got.png" alt="got"></p>
+<p>也就是说，我们需要泄漏出 <strong>0x602050</strong> 地址的内容。用 <strong>“%8$s”</strong> 就好了。</p>
+<p><img src="/image/20-cheating-readaddr.png" alt="read_addr"></p>
+<p><img src="/image/21-cheating-calc-system.png" alt="calc_system"></p>
+<p>成功获取到 <strong>system</strong> 和 <strong>/bin/sh</strong> 的内存地址！</p>
+<p><img src="/image/22-cheating-leak-succ.png" alt="leak-succ"></p>
+<h3 id="3-3-执行-sytem-“-bin-sh”-，get-shell"><a href="#3-3-执行-sytem-“-bin-sh”-，get-shell" class="headerlink" title="3.3 执行 sytem(“/bin/sh”)，get shell"></a>3.3 执行 <strong>sytem(“/bin/sh”)</strong>，<strong>get shell</strong></h3><p>我们已经拿到 <strong>system</strong> 的地址，还有任意地址写的漏洞，也能布置栈空间。接下来就是看怎样调用 <strong>system(“/bin/sh”)</strong> 最方便了。</p>
+<p>有很多方法可以实现这一步。最常用的方法是，利用 <strong>x64</strong> 程序的万能 <strong>gadget</strong>：<strong>init()</strong>函数，通过 <strong>ROP</strong> 来实现。</p>
+<p><img src="/image/24-cheating-init.png" alt="init-func"></p>
+<p>有没有更轻松的方法呢？回头看一眼主函数，发现 <strong>printf</strong> 的入参就是用户输入的 <strong>buf</strong>。这就意味着，只要我们把 <strong>printf</strong> 的 <strong>got</strong> 表改成 <strong>system</strong> 的地址，下一轮迭代时再发送 <strong>“/bin/sh”</strong> 的字符串，就可以直接执行 <strong>system(“/bin/sh”)</strong> 了，很简单是不是：）</p>
+<p><img src="/image/23-cheating-400BC0-func.png" alt="400BC0"></p>
+<p>查一下 <strong>got</strong> 表。<strong>printf</strong> 的地址是 <strong>0x602030</strong>，我们的目标是将这个地址的内容改写为前面获取到的 <strong>system</strong> 函数的真实地址。</p>
+<p><img src="/image/25-cheating-got-printf.png" alt="got-printf"></p>
+<p>攻击脚本如下：</p>
+<p><img src="/image/26-cheating-call-system.png" alt="call-system"></p>
+<p><strong>Get Shell</strong> 成功！</p>
+<p><img src="/image/27-cheating-getshell.png" alt="get-shell"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1172,7 +1370,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1185,7 +1383,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
