@@ -116,11 +116,10 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/22-cheating-leak-succ.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/24-cheating-init.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/08-cheating-main.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/23-cheating-400BC0-func.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/25-cheating-got-printf.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/26-cheating-call-system.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/27-cheating-getshell.png">
-<meta property="og:updated_time" content="2019-04-12T07:35:00.261Z">
+<meta property="og:updated_time" content="2019-04-12T16:42:32.375Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="格式化字符串漏洞攻击实战">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
@@ -344,7 +343,7 @@
       
 
       
-        <p>来源：<a href="https://mp.weixin.qq.com/s/" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+        <p>来源：<a href="https://mp.weixin.qq.com/s/1UCz0aao3fpN1jgi_RJGcw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <p><a href="/image/cheating">cheating</a> 是 <strong>CTF</strong> 里的一道 <strong>PWN</strong> 题。主要攻击点就在于格式化字符串漏洞的利用。</p>
 <h2 id="一、陷阱"><a href="#一、陷阱" class="headerlink" title="一、陷阱"></a>一、陷阱</h2><p>题目中布置了一个陷阱。如果用 <strong>IDA 6.8</strong> 来分析就很容易陷入陷阱，用 <strong>IDA 7.0</strong> 分析就会发现一些不一样的地方。</p>
 <p><img src="/image/01-cheating-ida-strcmp.png" alt="IDA-strcmp"></p>
@@ -404,9 +403,9 @@
 <p><img src="/image/14-cheating-exit-change.png" alt="exit-change-addr"></p>
 <p>所以，我们构造如下代码。</p>
 <p><img src="/image/17-cheating-repeat2main.png" alt="repeat2main"></p>
-<p>再次接收到 <strong>slogan:</strong> 字符串，成功将代码流程劫持，可以进入下一步攻击了。</p>
+<p>执行之后，再次接收到 <strong>slogan:</strong> 字符串，成功将代码流程劫持，可以进入下一步攻击了。</p>
 <p><img src="/image/18-cheating-repeat-succ.png" alt="repeat2main_succ"></p>
-<p>需要注意的是，我们将 <strong>exit()</strong> 的 <strong>got</strong> 地址修改为 <strong>0x400BE9</strong> 之后，实际上是通过一次 <strong>call</strong> 指令<br>重入了当前函数，也就意味着栈被抬高了一层（<strong>call</strong> 指令用于保存函数返回地址）。后续继续使用 <strong>printf</strong> 的格式化字符串漏洞时，每次都会多偏移一个参数的位置，这一点需要注意。</p>
+<p>需要注意的是，我们将 <strong>exit()</strong> 的 <strong>got</strong> 地址修改为 <strong>0x400BE9</strong> 之后，实际上是通过一次 <strong>call</strong> 指令重入了当前函数，也就意味着栈被抬高了一层（<strong>call</strong> 指令用于保存函数返回地址）。后续继续使用 <strong>printf</strong> 的格式化字符串漏洞时，每次都会多偏移一个参数的位置，这一点需要注意。</p>
 <h3 id="3-2-泄漏-system-和-bin-sh-的地址"><a href="#3-2-泄漏-system-和-bin-sh-的地址" class="headerlink" title="3.2 泄漏 system 和 /bin/sh 的地址"></a>3.2 泄漏 <strong>system</strong> 和 <strong>/bin/sh</strong> 的地址</h3><p>要 <strong>get shell</strong>，我们需要泄漏出 <strong>glibc</strong> 中 <strong>system()</strong> 和 <strong>/bin/sh</strong> 的地址。在环境提供了 <strong>libc.so.6</strong> 文件的条件下，我们只需要泄漏出任何一个库函数的地址，都可以通过文件中的偏移来计算出我们想要的符号地址。</p>
 <p>看一下 <strong>got</strong> 表，我们选择 <strong>read</strong> 函数来泄漏地址。为什么选择 <strong>read</strong>？回看一下主函数。</p>
 <p><img src="/image/08-cheating-main.png" alt="main"></p>
@@ -423,7 +422,6 @@
 <p>有没有更轻松的方法呢？回看一眼主函数。</p>
 <p><img src="/image/08-cheating-main.png" alt="main"></p>
 <p>咦？ <strong>printf</strong> 的入参就是用户输入的 <strong>buf</strong>。这就意味着，只要我们把 <strong>printf</strong> 的 <strong>got</strong> 表改成 <strong>system</strong> 的地址，下一轮迭代时再发送 <strong>“/bin/sh”</strong> 的字符串，就可以直接执行 <strong>system(“/bin/sh”)</strong> 了，很简单是不是：）</p>
-<p><img src="/image/23-cheating-400BC0-func.png" alt="400BC0"></p>
 <p>查一下 <strong>got</strong> 表。<strong>printf</strong> 的地址是 <strong>0x602030</strong>，我们的目标是将这个地址的内容改写为前面获取到的 <strong>system</strong> 函数的真实地址。</p>
 <p><img src="/image/25-cheating-got-printf.png" alt="got-printf"></p>
 <p>攻击脚本如下：</p>
