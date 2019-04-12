@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="格式化字符串漏洞,printf,puts," />
+  <meta name="keywords" content="格式化字符串漏洞,printf,puts,got,plt," />
 
 
 
@@ -82,10 +82,10 @@
 
 
 <meta name="description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
-<meta name="keywords" content="格式化字符串漏洞,printf,puts">
+<meta name="keywords" content="格式化字符串漏洞,printf,puts,got,plt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="格式化字符串漏洞攻击实战">
-<meta property="og:url" content="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/index.html">
+<meta property="og:url" content="http://www.yaowendao.com/2019/04/09/格式化字符串漏洞攻击实战/index.html">
 <meta property="og:site_name" content="闻道解惑">
 <meta property="og:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
 <meta property="og:locale" content="zh-Hans">
@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/25-cheating-got-printf.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/26-cheating-call-system.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/27-cheating-getshell.png">
-<meta property="og:updated_time" content="2019-04-12T07:03:11.034Z">
+<meta property="og:updated_time" content="2019-04-12T07:07:16.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="格式化字符串漏洞攻击实战">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
@@ -152,7 +152,7 @@
 
 
 
-  <link rel="canonical" href="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/"/>
+  <link rel="canonical" href="http://www.yaowendao.com/2019/04/09/格式化字符串漏洞攻击实战/"/>
 
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2018/04/09/格式化字符串漏洞攻击实战/">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2019/04/09/格式化字符串漏洞攻击实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="香依香偎">
@@ -304,8 +304,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T00:00:00+08:00">
-                2018-04-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T00:00:00+08:00">
+                2019-04-09
               </time>
             
 
@@ -444,6 +444,10 @@
           
             <a href="/tags/puts/" rel="tag"># puts</a>
           
+            <a href="/tags/got/" rel="tag"># got</a>
+          
+            <a href="/tags/plt/" rel="tag"># plt</a>
+          
         </div>
       
 
@@ -455,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/24/Mozilla Rhino反序列化漏洞POC分析/" rel="next" title="Mozilla Rhino 反序列化漏洞 POC 分析">
-                <i class="fa fa-chevron-left"></i> Mozilla Rhino 反序列化漏洞 POC 分析
+              <a href="/2019/03/24/CVE-2019-6446浅析/" rel="next" title="CVE-2019-6446 浅析">
+                <i class="fa fa-chevron-left"></i> CVE-2019-6446 浅析
               </a>
             
           </div>
@@ -464,10 +468,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/24/CVE-2019-6446浅析/" rel="prev" title="CVE-2019-6446 浅析">
-                CVE-2019-6446 浅析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -561,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
