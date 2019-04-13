@@ -119,7 +119,9 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/25-cheating-got-printf.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/26-cheating-call-system.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/27-cheating-getshell.png">
-<meta property="og:updated_time" content="2019-04-12T16:42:32.375Z">
+<meta property="og:image" content="http://www.yaowendao.com/image/28-cheating-scan-format-string-vuln.png">
+<meta property="og:image" content="http://www.yaowendao.com/2019/04/09/格式化字符串漏洞攻击实战/image/29-cheating-scan-vuln-result.png">
+<meta property="og:updated_time" content="2019-04-13T14:11:29.359Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="格式化字符串漏洞攻击实战">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 cheating 是 CTF 里的一道 PWN 题。主要攻击点就在于格式化字符串漏洞的利用。 一、陷阱题目中布置了一个陷阱。如果用 IDA 6.8 来分析就很容易陷入陷阱，用 IDA 7.0 分析就会发现一些不一样的地方。   可以发现，IDA 6.8 识别出的 strcmp、puts 被 IDA 7.0 识别为了 strncmp、printf。用 readelf -r">
@@ -428,8 +430,16 @@
 <p><img src="/image/26-cheating-call-system.png" alt="call-system"></p>
 <p>执行一下，成功 <strong>Get Shell</strong> ！</p>
 <p><img src="/image/27-cheating-getshell.png" alt="get-shell"></p>
+<h2 id="四、One-More-Thing"><a href="#四、One-More-Thing" class="headerlink" title="四、One More Thing"></a>四、One More Thing</h2><p><a href="https://github.com/L4ys/LazyIDA" target="_blank" rel="noopener"><strong>LazyIDA</strong></a> 是 <strong>IDA Pro</strong> 的一个插件，其中有一个功能是“扫描格式化字符串漏洞 Scan String Format Vulnerabilities”。</p>
+<p><img src="/image/28-cheating-scan-format-string-vuln.png" alt="scan-string-format"></p>
+<p>扫描一下看看，很快就找到了漏洞点。</p>
+<p><img src="image/29-cheating-scan-vuln-result.png" alt="scan-string-format-result"></p>
+<blockquote>
+<p>附：</p>
 <p>原始程序下载：<a href="/image/cheating">cheating</a></p>
 <p>攻击脚本链接：<a href="/image/pwn_cheating.py">pwn_cheating.py</a></p>
+<p>LazyIDA 下载：<a href="https://github.com/L4ys/LazyIDA" target="_blank" rel="noopener">LazyIDA</a> </p>
+</blockquote>
 
       
     </div>
@@ -632,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、陷阱"><span class="nav-number">1.</span> <span class="nav-text">一、陷阱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、主流程和-sub-400ACC-的输入检查"><span class="nav-number">2.</span> <span class="nav-text">二、主流程和 sub_400ACC() 的输入检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、格式化字符串漏洞"><span class="nav-number">3.</span> <span class="nav-text">三、格式化字符串漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-程序退出问题"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 程序退出问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-泄漏-system-和-bin-sh-的地址"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 泄漏 system 和 /bin/sh 的地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-执行-sytem-“-bin-sh”-，get-shell"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 执行 sytem(“/bin/sh”)，get shell</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、陷阱"><span class="nav-number">1.</span> <span class="nav-text">一、陷阱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、主流程和-sub-400ACC-的输入检查"><span class="nav-number">2.</span> <span class="nav-text">二、主流程和 sub_400ACC() 的输入检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、格式化字符串漏洞"><span class="nav-number">3.</span> <span class="nav-text">三、格式化字符串漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-程序退出问题"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 程序退出问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-泄漏-system-和-bin-sh-的地址"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 泄漏 system 和 /bin/sh 的地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-执行-sytem-“-bin-sh”-，get-shell"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 执行 sytem(“/bin/sh”)，get shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、One-More-Thing"><span class="nav-number">4.</span> <span class="nav-text">四、One More Thing</span></a></li></ol></div>
             
 
           </div>
