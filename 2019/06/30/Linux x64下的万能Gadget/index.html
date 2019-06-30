@@ -97,7 +97,7 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/05-rop-pop-rsi.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/06-rop-pop-rsi-rdi-ret.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/07-rop-stack-3.png">
-<meta property="og:updated_time" content="2019-06-30T10:26:37.457Z">
+<meta property="og:updated_time" content="2019-06-30T10:27:14.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux x64 下的万能 Gadget">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
@@ -361,8 +361,7 @@
 <li><p>3、<strong>__libc_csu_init()</strong> 不只是一个通用 <strong>Gadget</strong>，完全就是“万能 <strong>Gadget</strong>”！</p>
 </li>
 </ul>
-<p>参考阅读：</p>
-<p>[1] 蒸米《一步一步学ROP之linux_x86篇》：<a href="https://zhuanlan.zhihu.com/p/23487280" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23487280</a>  </p>
+<h2 id="参考阅读："><a href="#参考阅读：" class="headerlink" title="参考阅读："></a>参考阅读：</h2><p>[1] 蒸米《一步一步学ROP之linux_x86篇》：<a href="https://zhuanlan.zhihu.com/p/23487280" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23487280</a>  </p>
 <p>[2] 蒸米《一步一步学ROP之linux_x64篇》：<a href="https://zhuanlan.zhihu.com/p/23537552" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23537552</a></p>
 
       
@@ -568,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、通用-Gadget"><span class="nav-number">1.</span> <span class="nav-text">一、通用 Gadget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、隐藏-Gadget：pop-rdi-ret"><span class="nav-number">2.</span> <span class="nav-text">二、隐藏 Gadget：pop rdi,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、隐藏-Gadget：pop-rsi-…-ret"><span class="nav-number">3.</span> <span class="nav-text">三、隐藏 Gadget：pop rsi,…,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、通用-Gadget"><span class="nav-number">1.</span> <span class="nav-text">一、通用 Gadget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、隐藏-Gadget：pop-rdi-ret"><span class="nav-number">2.</span> <span class="nav-text">二、隐藏 Gadget：pop rdi,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、隐藏-Gadget：pop-rsi-…-ret"><span class="nav-number">3.</span> <span class="nav-text">三、隐藏 Gadget：pop rsi,…,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考阅读："><span class="nav-number">5.</span> <span class="nav-text">参考阅读：</span></a></li></ol></div>
             
 
           </div>
