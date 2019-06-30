@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="闭合优先,HTML," />
+  <meta name="keywords" content="Linux,x64,栈溢出,gadget,pop rdi,pop rsi," />
 
 
 
@@ -81,26 +81,26 @@
 
 
 
-<meta name="description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta name="keywords" content="闭合优先,HTML">
+<meta name="description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
+<meta name="keywords" content="Linux,x64,栈溢出,gadget,pop rdi,pop rsi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="闭合优先的神奇标签">
-<meta property="og:url" content="http://www.yaowendao.com/2017/07/16/闭合优先的神奇标签/index.html">
+<meta property="og:title" content="Linux x64 下的万能 Gadget">
+<meta property="og:url" content="http://www.yaowendao.com/2019/06/30/Linux x64下的万能Gadget/index.html">
 <meta property="og:site_name" content="闻道解惑">
-<meta property="og:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
+<meta property="og:description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.yaowendao.com/image/01-noframes-html.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/02-noframes-alert.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/03-noframes-src.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/04-w3school-tags.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/05-tags-txt.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/06-showtag-py.png">
-<meta property="og:image" content="http://www.yaowendao.com/image/07-show-all-tag.png">
-<meta property="og:updated_time" content="2018-06-02T07:20:18.151Z">
+<meta property="og:image" content="http://www.yaowendao.com/image/01-rop-__libc_csu_init.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/02-rop-stack-1.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/03-rop-pop-rdi.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/04-rop-stack-2.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/05-rop-pop-rsi.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/06-rop-pop-rsi-rdi-ret.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/07-rop-stack-3.png">
+<meta property="og:updated_time" content="2019-06-30T10:17:27.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="闭合优先的神奇标签">
-<meta name="twitter:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta name="twitter:image" content="http://www.yaowendao.com/image/01-noframes-html.png">
+<meta name="twitter:title" content="Linux x64 下的万能 Gadget">
+<meta name="twitter:description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
+<meta name="twitter:image" content="http://www.yaowendao.com/image/01-rop-__libc_csu_init.png">
 
 
 
@@ -130,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yaowendao.com/2017/07/16/闭合优先的神奇标签/"/>
+  <link rel="canonical" href="http://www.yaowendao.com/2019/06/30/Linux x64下的万能Gadget/"/>
 
 
 
 
 
-  <title>闭合优先的神奇标签 | 闻道解惑</title>
+  <title>Linux x64 下的万能 Gadget | 闻道解惑</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2017/07/16/闭合优先的神奇标签/">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2019/06/30/Linux x64下的万能Gadget/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="香依香偎">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">闭合优先的神奇标签</h1>
+          <h1 class="post-title" itemprop="name headline">Linux x64 下的万能 Gadget</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T00:00:00+08:00">
-                2017-07-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-30T00:00:00+08:00">
+                2019-06-30
               </time>
             
 
@@ -320,40 +320,48 @@
       
 
       
-        <p>来源：<a href="https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
-<h2 id="noframes"><a href="#noframes" class="headerlink" title="noframes"></a>noframes</h2><p>先看一段 HTML：</p>
-<p><img src="/image/01-noframes-html.png" alt="01-noframes-html"></p>
-<p>不过是展示了一张图片而已。用浏览器打开看看。</p>
-<p><img src="/image/02-noframes-alert.png" alt="02-noframes-alert"></p>
-<p>咦？怎么弹框了？看看浏览器处理的源码。</p>
-<p><img src="/image/03-noframes-src.png" alt="03-noframes-src"></p>
-<p>原来，<strong>img</strong> 标签 <strong>src</strong> 属性里的 <strong>\&lt;/noframes></strong>，跳过了 <strong>\&lt;img></strong> 标签和 <strong>src</strong> 属性，把外层的 <strong>\&lt;noframes></strong> 给闭合了，导致 <strong>src</strong> 后半部分的 <strong>script</strong> 标签被解析成了 HTML，从而触发了弹框。</p>
-<p>这可奇怪了。<strong>\&lt;/noframes></strong> 明明在双引号里面，怎么就跨越了<strong>src</strong> 属性跨越了<strong>\&lt;img></strong> 标签，漂洋过海地把外层的 <strong>noframes</strong> 标签给闭合了？难道说，<strong>\&lt;noframes></strong> 标签有一种特殊的魔力。它的闭合优先级，高于双引号的完整性优先级，高于嵌套在内层的标签的闭合优先级。</p>
-<p>还有其他标签也有这样的魔力么？我们 fuzz 一下看看。</p>
-<h2 id="fuzz-找找"><a href="#fuzz-找找" class="headerlink" title="fuzz 找找"></a>fuzz 找找</h2><p>从 w3school 找到所有的 HTML 标签：</p>
-<p><img src="/image/04-w3school-tags.png" alt="04-w3school-tags"></p>
-<p>整理成 tags.txt。</p>
-<p><img src="/image/05-tags-txt.png" alt="05-tags-txt"></p>
-<p>按照前述 noframes 的格式，依次把他们输出到 show.html 中。</p>
-<p><img src="/image/06-showtag-py.png" alt="06-showtag-py"></p>
-<p>执行，打开 show.html 看看效果。</p>
-<p><img src="/image/07-show-all-tag.png" alt="07-show-all-tag"></p>
-<p>现在我们知道，这些标签都是闭合优先级高于双引号完整性优先级的特殊标签。</p>
+        <p>来源：<a href="https://mp.weixin.qq.com/s/1UCz0aao3fpN1jgi_RJGcw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<h2 id="一、通用-Gadget"><a href="#一、通用-Gadget" class="headerlink" title="一、通用 Gadget"></a>一、通用 Gadget</h2><p>蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 <strong>x64</strong> 程序中调用了 <strong>libc.so</strong>，就会自带一个很好用的通用Gadget：<strong>__libc_csu_init()</strong>。</p>
+<p><img src="/image/01-rop-__libc_csu_init.png" alt="__libc_csu_init"></p>
+<p>如图，先从 <strong>0x40061A</strong> 开始执行，将 <strong>rbx/rbp/r12/r13/r14/r15</strong> 这六个寄存器全部布置好，再 <strong>ret</strong> 到 <strong>0x400600</strong> ，继续布置 <strong>rdx/rsi/rdi</strong>，最后通过 <strong>call qword ptr[r12+rbx*8]</strong> 执行目标函数。</p>
+<p>这个通用 <strong>Gadget</strong> 好用的地方在于，不仅可以通过函数地址的指针（通常会用记录库函数真实地址的 <strong>got</strong> 表项）来控制目标函数，还可以控制目标函数的最多三个入参（<strong>rdi/rsi/rdx</strong>）的值。此外，只要设置 rbp=rbx+1，这个 <strong>Gadget</strong> 可以循环进入一直调用。</p>
+<p>计算一下需要的空间。</p>
+<p>可以看出，这个 <strong>Gadget</strong> 需要布置六个寄存器（<strong>rbx/rbp/r12/r13/r14/r15</strong>）加一个 <strong>ret</strong> 返回地址，<strong>x64</strong> 下至少需要 <strong>56</strong> 个字节的栈空间。如果再算上将 <strong>rip</strong> 指令跳转进来（0x40061A）的一个 <strong>ret</strong> 地址，那就是 <strong>64</strong> 字节的栈空间。</p>
+<p>栈的布置如下：</p>
+<p><img src="/image/02-rop-stack-1.png" alt="stack-1"></p>
+<h2 id="二、隐藏-Gadget：pop-rdi-ret"><a href="#二、隐藏-Gadget：pop-rdi-ret" class="headerlink" title="二、隐藏 Gadget：pop rdi,ret"></a>二、隐藏 Gadget：pop rdi,ret</h2><p>其实，这个通用 <strong>Gadget</strong> 里，还隐藏了两个更好用的 <strong>Gadget</strong>。</p>
+<p>将地址 <strong>0x400622</strong> 上 <strong>pop r15,ret</strong> 的三字节指令(<strong>0x41 0x5F 0xC3</strong>)拆散看，会发现后两个字节组成了一组新的指令 <strong>pop rdi,ret</strong>。</p>
+<p><img src="/image/03-rop-pop-rdi.png" alt="pop-rdi"></p>
+<p>这已经足够完成单入参的函数调用了。</p>
+<p>通常栈溢出之后，需要进行如下两步：</p>
 <ul>
-<li>\&lt;!–</li>
-<li>\&lt;iframe></li>
-<li>\&lt;noframes></li>
-<li>\&lt;noscript></li>
-<li>\&lt;script></li>
-<li>\&lt;style></li>
-<li>\&lt;textarea></li>
-<li>\&lt;title></li>
-<li>\&lt;xmp></li>
+<li><p>1、通过类似 <strong>puts(puts)</strong> 的方式，泄漏libc库函数的地址，从而通过偏移计算出 <strong>system</strong> 函数和 <strong>“/bin/sh”</strong> 字符串的地址</p>
+</li>
+<li><p>2、执行 <strong>sytem(“bin/sh”)</strong> 获得系统 <strong>shell</strong></p>
+</li>
 </ul>
-<h2 id="攻击场景"><a href="#攻击场景" class="headerlink" title="攻击场景"></a>攻击场景</h2><p>这个特性出现的原因，可能是源于浏览器对 <strong>DOM</strong> 树的特殊处理。而在某些 <strong>XSS</strong> 攻击的场景下，这一特性可能导致意想不到的结果。</p>
-<p>特别是，像邮箱或论坛等支持富文本的应用，出于防御 <strong>XSS</strong> 的考虑，一定会对用户的输入进行语法分析和检查。但是，如果语法分析的结果和浏览器的识别结果不一致的话，就会形成 <strong>XSS</strong> 的攻击点。</p>
-<p>比如文章开头的那段 <strong>noframes</strong> 语句，如果防 <strong>XSS</strong> 引擎将 <strong>src</strong> 里的内容统一理解为 <strong>img</strong> 的 <strong>src</strong> 属性，就可能形成 <strong>XSS</strong> 攻击的入口点。</p>
-<p>这个特性还有哪些用处，就需要你的脑洞大开了：）</p>
+<p>发现没有？大多数情况我们只需要一个入参的函数调用， <strong><strong>libc_csu_init</strong>()</strong> 函数最后的这个 <strong>pop rdi,ret</strong> 可以完美实现上述两个步骤。</p>
+<p>空间上，只需要 <strong>24</strong> 个字节（一个 <strong>QWORD</strong> 存放 <strong>ret</strong> 进来的地址，两个 <strong>QWORD</strong> 作为入参和被调用函数地址）的溢出空间就足够啦。</p>
+<p>栈的空间布置如下：</p>
+<p><img src="/image/04-rop-stack-2.png" alt="stack-2"></p>
+<p>那，如果需要控制两个入参呢，这个 <strong>Gadget</strong> 有办法不？有。</p>
+<h2 id="三、隐藏-Gadget：pop-rsi-…-ret"><a href="#三、隐藏-Gadget：pop-rsi-…-ret" class="headerlink" title="三、隐藏 Gadget：pop rsi,…,ret"></a>三、隐藏 Gadget：pop rsi,…,ret</h2><p>将地址 <strong>0x400620</strong> 上 <strong>pop r14</strong> 的两字节指令（<strong>0x41 0x5E</strong>）拆散，会发现后一个字节是单字节指令 <strong>pop rsi</strong>，可以用来控制第二个入参。</p>
+<p><img src="/image/05-rop-pop-rsi.png" alt="pop-rsi"></p>
+<p>和前述的地址 <strong>0x400623</strong> 上的指令 <strong>pop rdi,ret</strong>组合起来，就可以完成两个入参的函数调用。</p>
+<p><img src="/image/06-rop-pop-rsi-rdi-ret.png" alt="pop-rdi-rsi"></p>
+<p>只需要将栈布置如下就可以啦。</p>
+<p><img src="/image/07-rop-stack-3.png" alt="stack"></p>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><ul>
+<li><p>1、只要<strong>Linux x64</strong> 的程序中调用了 <strong>libc.so</strong>，程序中就会自带一个很好用的通用Gadget：<strong>__libc_csu_init()</strong>。</p>
+</li>
+<li><p>2、<strong>__libc_csu_init()</strong> 的 <strong>0x400600</strong> 到 <strong>0x400624</strong> 其中包含了 <strong>pop rdi</strong>、<strong>pop rsi</strong>、<strong>pop rdx</strong>、<strong>ret</strong> 等指令，通过巧妙的组合可以实现调用任意单参数、双参数、三参数的函数，从而顺利获取系统 <strong>shell</strong>。</p>
+</li>
+<li><p>3、<strong>__libc_csu_init()</strong> 不只是一个通用 <strong>Gadget</strong>，完全就是“万能 <strong>Gadget</strong>”！</p>
+</li>
+</ul>
+<p>参考阅读：</p>
+<p>[1] 蒸米《一步一步学ROP之linux_x86篇》：<a href="https://zhuanlan.zhihu.com/p/23487280" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23487280</a>  </p>
+<p>[2] 蒸米《一步一步学ROP之linux_x64篇》：<a href="https://zhuanlan.zhihu.com/p/23537552" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23537552</a></p>
 
       
     </div>
@@ -371,9 +379,17 @@
       
         <div class="post-tags">
           
-            <a href="/tags/闭合优先/" rel="tag"># 闭合优先</a>
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
           
-            <a href="/tags/HTML/" rel="tag"># HTML</a>
+            <a href="/tags/x64/" rel="tag"># x64</a>
+          
+            <a href="/tags/栈溢出/" rel="tag"># 栈溢出</a>
+          
+            <a href="/tags/gadget/" rel="tag"># gadget</a>
+          
+            <a href="/tags/pop-rdi/" rel="tag"># pop rdi</a>
+          
+            <a href="/tags/pop-rsi/" rel="tag"># pop rsi</a>
           
         </div>
       
@@ -386,15 +402,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/04/09/格式化字符串漏洞攻击实战/" rel="next" title="格式化字符串漏洞攻击实战">
+                <i class="fa fa-chevron-left"></i> 格式化字符串漏洞攻击实战
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/11/fastjson反序列化漏洞POC分析/" rel="prev" title="fastjson 反序列化漏洞POC分析">
-                fastjson 反序列化漏洞POC分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -550,7 +566,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#noframes"><span class="nav-number">1.</span> <span class="nav-text">noframes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fuzz-找找"><span class="nav-number">2.</span> <span class="nav-text">fuzz 找找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击场景"><span class="nav-number">3.</span> <span class="nav-text">攻击场景</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、通用-Gadget"><span class="nav-number">1.</span> <span class="nav-text">一、通用 Gadget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、隐藏-Gadget：pop-rdi-ret"><span class="nav-number">2.</span> <span class="nav-text">二、隐藏 Gadget：pop rdi,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、隐藏-Gadget：pop-rsi-…-ret"><span class="nav-number">3.</span> <span class="nav-text">三、隐藏 Gadget：pop rsi,…,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li></ol></div>
             
 
           </div>
