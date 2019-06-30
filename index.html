@@ -316,7 +316,7 @@
       
         
           
-            <p>来源：<a href="https://mp.weixin.qq.com/s/1UCz0aao3fpN1jgi_RJGcw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+            <p>来源：<a href="https://mp.weixin.qq.com/s/5bxE0h7luKIb2Vn353wQgw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <h2 id="一、通用-Gadget"><a href="#一、通用-Gadget" class="headerlink" title="一、通用 Gadget"></a>一、通用 Gadget</h2><p>蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 <strong>x64</strong> 程序中调用了 <strong>libc.so</strong>，就会自带一个很好用的通用Gadget：<strong>__libc_csu_init()</strong>。</p>
 <p><img src="/image/01-rop-__libc_csu_init.png" alt="__libc_csu_init"></p>
 <p>如图，先从 <strong>0x40061A</strong> 开始执行，将 <strong>rbx/rbp/r12/r13/r14/r15</strong> 这六个寄存器全部布置好，再 <strong>ret</strong> 到 <strong>0x400600</strong> ，继续布置 <strong>rdx/rsi/rdi</strong>，最后通过 <strong>call qword ptr[r12+rbx*8]</strong> 执行目标函数。</p>
