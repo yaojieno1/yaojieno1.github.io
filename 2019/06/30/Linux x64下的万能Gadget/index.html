@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
+<meta name="description" content="Linux x64 下的万能 Gadget来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好">
 <meta name="keywords" content="Linux,x64,栈溢出,gadget,pop rdi,pop rsi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux x64 下的万能 Gadget">
 <meta property="og:url" content="http://www.yaowendao.com/2019/06/30/Linux x64下的万能Gadget/index.html">
 <meta property="og:site_name" content="闻道解惑">
-<meta property="og:description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
+<meta property="og:description" content="Linux x64 下的万能 Gadget来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.yaowendao.com/image/01-rop-__libc_csu_init.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/02-rop-stack-1.png">
@@ -97,10 +97,10 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/05-rop-pop-rsi.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/06-rop-pop-rsi-rdi-ret.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/07-rop-stack-3.png">
-<meta property="og:updated_time" content="2019-06-30T12:32:47.692Z">
+<meta property="og:updated_time" content="2019-07-03T12:20:13.451Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux x64 下的万能 Gadget">
-<meta name="twitter:description" content="来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好，再 ret 到 0x400600 ，继续">
+<meta name="twitter:description" content="Linux x64 下的万能 Gadget来源：香依香偎@闻道解惑 一、通用 Gadget蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 x64 程序中调用了 libc.so，就会自带一个很好用的通用Gadget：__libc_csu_init()。  如图，先从 0x40061A 开始执行，将 rbx/rbp/r12/r13/r14/r15 这六个寄存器全部布置好">
 <meta name="twitter:image" content="http://www.yaowendao.com/image/01-rop-__libc_csu_init.png">
 
 
@@ -321,7 +321,7 @@
       
 
       
-        <p>来源：<a href="https://mp.weixin.qq.com/s/5bxE0h7luKIb2Vn353wQgw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+        <h1 id="Linux-x64-下的万能-Gadget"><a href="#Linux-x64-下的万能-Gadget" class="headerlink" title="Linux x64 下的万能 Gadget"></a>Linux x64 下的万能 Gadget</h1><p>来源：<a href="https://mp.weixin.qq.com/s/5bxE0h7luKIb2Vn353wQgw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <h2 id="一、通用-Gadget"><a href="#一、通用-Gadget" class="headerlink" title="一、通用 Gadget"></a>一、通用 Gadget</h2><p>蒸米在《一步一步学ROP之linux_x64篇》中提到，在栈溢出的场景下，只要 <strong>x64</strong> 程序中调用了 <strong>libc.so</strong>，就会自带一个很好用的通用Gadget：<strong>__libc_csu_init()</strong>。</p>
 <p><img src="/image/01-rop-__libc_csu_init.png" alt="__libc_csu_init"></p>
 <p>如图，先从 <strong>0x40061A</strong> 开始执行，将 <strong>rbx/rbp/r12/r13/r14/r15</strong> 这六个寄存器全部布置好，再 <strong>ret</strong> 到 <strong>0x400600</strong> ，继续布置 <strong>rdx/rsi/rdi</strong>，最后通过 <strong>call qword ptr[r12+rbx*8]</strong> 执行目标函数。</p>
@@ -567,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、通用-Gadget"><span class="nav-number">1.</span> <span class="nav-text">一、通用 Gadget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、隐藏-Gadget：pop-rdi-ret"><span class="nav-number">2.</span> <span class="nav-text">二、隐藏 Gadget：pop rdi,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、隐藏-Gadget：pop-rsi-…-ret"><span class="nav-number">3.</span> <span class="nav-text">三、隐藏 Gadget：pop rsi,…,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考阅读："><span class="nav-number">5.</span> <span class="nav-text">参考阅读：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-x64-下的万能-Gadget"><span class="nav-number">1.</span> <span class="nav-text">Linux x64 下的万能 Gadget</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、通用-Gadget"><span class="nav-number">1.1.</span> <span class="nav-text">一、通用 Gadget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、隐藏-Gadget：pop-rdi-ret"><span class="nav-number">1.2.</span> <span class="nav-text">二、隐藏 Gadget：pop rdi,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、隐藏-Gadget：pop-rsi-…-ret"><span class="nav-number">1.3.</span> <span class="nav-text">三、隐藏 Gadget：pop rsi,…,ret</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结"><span class="nav-number">1.4.</span> <span class="nav-text">四、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考阅读："><span class="nav-number">1.5.</span> <span class="nav-text">参考阅读：</span></a></li></ol></li></ol></div>
             
 
           </div>
