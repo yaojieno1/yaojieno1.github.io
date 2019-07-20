@@ -264,7 +264,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/20/利用 Transfer-Encoded-Chunked 绕过 WAF 实战/" itemprop="url">利用 Transfer-Encoded：Chunked 绕过 WAF</a></h1>
+                <a class="post-title-link" href="/2019/07/20/利用 Transfer-Encoded-Chunked 绕过 WAF 实战/" itemprop="url">利用 Transfer-Encoding：Chunked 绕过 WAF</a></h1>
         
 
         <div class="post-meta">
@@ -316,7 +316,7 @@
       
         
           
-            <h1 id="利用-Transfer-Encoded-Chunked-绕过-WAF-实战"><a href="#利用-Transfer-Encoded-Chunked-绕过-WAF-实战" class="headerlink" title="利用 Transfer-Encoded: Chunked 绕过 WAF 实战"></a>利用 Transfer-Encoded: Chunked 绕过 WAF 实战</h1><p>来源：<a href="https://mp.weixin.qq.com/s/5bxE0h7luKIb2Vn353wQgw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+            <h1 id="利用-Transfer-Encoding-Chunked-绕过-WAF-实战"><a href="#利用-Transfer-Encoding-Chunked-绕过-WAF-实战" class="headerlink" title="利用 Transfer-Encoding: Chunked 绕过 WAF 实战"></a>利用 Transfer-Encoding: Chunked 绕过 WAF 实战</h1><p>来源：<a href="https://mp.weixin.qq.com/s/XFzWrmOT-FhrneXjdG5pUQ" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <p>找到一个部署了 <code>WAF</code> 的站点。先发一个报文，删除了 <code>cookie</code>。</p>
 <p><img src="/image/waf-01-normal-request.png" alt="01-normal-request"></p>
 <p>可以看到服务端返回了 403，证明请求已经到达服务端了。</p>
@@ -328,7 +328,7 @@
 <p>现在我们看看怎么绕过WAF。<code>bypassword</code> 在 <a href="https://www.freebuf.com/news/193659.html" target="_blank" rel="noopener">《在HTTP协议层面绕过WAF》</a> 中提出了使用 <code>Transfer-Encoding:chunked</code> 来绕过 <code>WAF</code> 的方案，原理是将请求报文的<code>body</code>部分切分成多份来绕过WAF规则。我们来试试。</p>
 <p>上一个请求需要做三点改动：  </p>
 <ul>
-<li>请求的header部分，增加一个 “Tranfer-Encoded: chunked” 的 header  </li>
+<li>请求的header部分，增加一个 “Tranfer-Encoding: chunked” 的 header  </li>
 <li>请求的body部分切成多份，每一份都是 “Length+换行+Value+换行” 的格式  </li>
 <li>body部分的最后，增加 “0+空行+空行” 作为结束符  </li>
 </ul>
@@ -1709,7 +1709,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Web,WAF,bypass,Transfer-Encoded,chunked," />
+  <meta name="keywords" content="Web,WAF,bypass,chunked,Transfer-Encoding," />
 
 
 
@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="利用 Transfer-Encoded: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypasswo">
-<meta name="keywords" content="Web,WAF,bypass,Transfer-Encoded,chunked">
+<meta name="description" content="利用 Transfer-Encoding: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypassw">
+<meta name="keywords" content="Web,WAF,bypass,chunked,Transfer-Encoding">
 <meta property="og:type" content="article">
-<meta property="og:title" content="利用 Transfer-Encoded：Chunked 绕过 WAF">
+<meta property="og:title" content="利用 Transfer-Encoding：Chunked 绕过 WAF">
 <meta property="og:url" content="http://www.yaowendao.com/2019/07/20/利用 Transfer-Encoded-Chunked 绕过 WAF 实战/index.html">
 <meta property="og:site_name" content="闻道解惑">
-<meta property="og:description" content="利用 Transfer-Encoded: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypasswo">
+<meta property="og:description" content="利用 Transfer-Encoding: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypassw">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.yaowendao.com/image/waf-01-normal-request.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/waf-02-response.png">
@@ -98,10 +98,10 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/waf-07-chunked-comments-request.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/waf-08-c0ny1-plugin-repeater-chunked-coding.gif">
 <meta property="og:image" content="http://www.yaowendao.com/image/waf-09-c0ny1-plugin-sqlmap-bypassWAF.gif">
-<meta property="og:updated_time" content="2019-07-20T14:50:08.457Z">
+<meta property="og:updated_time" content="2019-07-20T15:27:51.994Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="利用 Transfer-Encoded：Chunked 绕过 WAF">
-<meta name="twitter:description" content="利用 Transfer-Encoded: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypasswo">
+<meta name="twitter:title" content="利用 Transfer-Encoding：Chunked 绕过 WAF">
+<meta name="twitter:description" content="利用 Transfer-Encoding: Chunked 绕过 WAF 实战来源：香依香偎@闻道解惑 找到一个部署了 WAF 的站点。先发一个报文，删除了 cookie。  可以看到服务端返回了 403，证明请求已经到达服务端了。  接下来，在报文中增加无意义的 /etc/passwd，触发 WAF 拦截规则。  无法收到响应，请求被 WAF 拦截。  现在我们看看怎么绕过WAF。bypassw">
 <meta name="twitter:image" content="http://www.yaowendao.com/image/waf-01-normal-request.png">
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title>利用 Transfer-Encoded：Chunked 绕过 WAF | 闻道解惑</title>
+  <title>利用 Transfer-Encoding：Chunked 绕过 WAF | 闻道解惑</title>
   
 
 
@@ -272,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">利用 Transfer-Encoded：Chunked 绕过 WAF</h1>
+          <h1 class="post-title" itemprop="name headline">利用 Transfer-Encoding：Chunked 绕过 WAF</h1>
         
 
         <div class="post-meta">
@@ -322,7 +322,7 @@
       
 
       
-        <h1 id="利用-Transfer-Encoded-Chunked-绕过-WAF-实战"><a href="#利用-Transfer-Encoded-Chunked-绕过-WAF-实战" class="headerlink" title="利用 Transfer-Encoded: Chunked 绕过 WAF 实战"></a>利用 Transfer-Encoded: Chunked 绕过 WAF 实战</h1><p>来源：<a href="https://mp.weixin.qq.com/s/5bxE0h7luKIb2Vn353wQgw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+        <h1 id="利用-Transfer-Encoding-Chunked-绕过-WAF-实战"><a href="#利用-Transfer-Encoding-Chunked-绕过-WAF-实战" class="headerlink" title="利用 Transfer-Encoding: Chunked 绕过 WAF 实战"></a>利用 Transfer-Encoding: Chunked 绕过 WAF 实战</h1><p>来源：<a href="https://mp.weixin.qq.com/s/XFzWrmOT-FhrneXjdG5pUQ" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <p>找到一个部署了 <code>WAF</code> 的站点。先发一个报文，删除了 <code>cookie</code>。</p>
 <p><img src="/image/waf-01-normal-request.png" alt="01-normal-request"></p>
 <p>可以看到服务端返回了 403，证明请求已经到达服务端了。</p>
@@ -334,7 +334,7 @@
 <p>现在我们看看怎么绕过WAF。<code>bypassword</code> 在 <a href="https://www.freebuf.com/news/193659.html" target="_blank" rel="noopener">《在HTTP协议层面绕过WAF》</a> 中提出了使用 <code>Transfer-Encoding:chunked</code> 来绕过 <code>WAF</code> 的方案，原理是将请求报文的<code>body</code>部分切分成多份来绕过WAF规则。我们来试试。</p>
 <p>上一个请求需要做三点改动：  </p>
 <ul>
-<li>请求的header部分，增加一个 “Tranfer-Encoded: chunked” 的 header  </li>
+<li>请求的header部分，增加一个 “Tranfer-Encoding: chunked” 的 header  </li>
 <li>请求的body部分切成多份，每一份都是 “Length+换行+Value+换行” 的格式  </li>
 <li>body部分的最后，增加 “0+空行+空行” 作为结束符  </li>
 </ul>
@@ -375,9 +375,9 @@
           
             <a href="/tags/bypass/" rel="tag"># bypass</a>
           
-            <a href="/tags/Transfer-Encoded/" rel="tag"># Transfer-Encoded</a>
-          
             <a href="/tags/chunked/" rel="tag"># chunked</a>
+          
+            <a href="/tags/Transfer-Encoding/" rel="tag"># Transfer-Encoding</a>
           
         </div>
       
@@ -492,7 +492,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -554,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#利用-Transfer-Encoded-Chunked-绕过-WAF-实战"><span class="nav-number">1.</span> <span class="nav-text">利用 Transfer-Encoded: Chunked 绕过 WAF 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">1.1.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#利用-Transfer-Encoding-Chunked-绕过-WAF-实战"><span class="nav-number">1.</span> <span class="nav-text">利用 Transfer-Encoding: Chunked 绕过 WAF 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">1.1.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></div>
             
 
           </div>
