@@ -316,7 +316,8 @@
       
         
           
-            <p><strong>House of Foce</strong> 是堆溢出的一种简单利用方式，通过一个例子来学习下。</p>
+            <h1 id="【堆溢出】从一个例子学习-House-of-Forcet"><a href="#【堆溢出】从一个例子学习-House-of-Forcet" class="headerlink" title="【堆溢出】从一个例子学习 House of Forcet"></a>【堆溢出】从一个例子学习 House of Forcet</h1><p>来源：<a href="https://mp.weixin.qq.com/s/1puywyLUjuFi5I5SlPi2BQ" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><strong>House of Foce</strong> 是堆溢出在特定场景下的一种简单利用方式，通过一个例子来学习下。</p>
 <p>首先看下运行环境， <strong>Ubuntu 16.04.1 LTS x64</strong> 中 <strong>Ubuntu GLIBC 2.23-0ubuntu10</strong> 版本的 <strong>GLIBC</strong>。</p>
 <p><img src="/image/hof-01-ubuntu-runtime.png" alt="01-runtime"></p>
 <p>再看下源码，有四次 <strong>malloc()</strong> 调用，中间夹着一次模拟溢出的内存改写。</p>
@@ -355,7 +356,7 @@
 <p><img src="/image/hof-18-set-to-main.png" alt="18-set-to-main"></p>
 <p>分配 <strong>16</strong> 个字节之后，main_arena的top指针是 <strong>0x602030</strong>，返回给程序的地址是 <strong>0x601020</strong>。</p>
 <p><img src="/image/hof-19-malloc-16-third.png" alt="19-malloc-16-third"></p>
-<p>注意到 <strong>0x601020</strong> 其实是 <strong>malloc()</strong> 的 <strong>GOT</strong> 表项地址，现在被 <strong>malloc()</strong> 输出到了程序里。当源码中用 <strong>*(long *)p = (long)main;</strong> 来修改分配的内存时，我们其实是覆盖了 <strong>malloc()</strong> 函数的 <strong>GOT</strong> 表项值，也就是把 <strong>malloc()</strong> 函数被劫持成了 <strong>main()</strong> 函数！</p>
+<p>注意到 <strong>0x601020</strong> 其实是 <strong>malloc()</strong> 的 <strong>GOT</strong> 表项地址，现在被 <strong>malloc()</strong> 输出到了程序里。当源码中用 <strong>*(long *)p = (long)main;</strong> 来修改分配的内存时，我们其实是覆盖了 <strong>malloc()</strong> 函数的 <strong>GOT</strong> 表项值，也就是说， <strong>malloc()</strong> 函数被劫持成了 <strong>main()</strong> 函数！</p>
 <p><img src="/image/hof-20-hijacked-to-main.png" alt="20-hijacked-to-main"></p>
 <p>示意图如下</p>
 <p><img src="/image/hof-21-overflow-malloc-to-main.png" alt="21-overflow-malloc-to-main"></p>
