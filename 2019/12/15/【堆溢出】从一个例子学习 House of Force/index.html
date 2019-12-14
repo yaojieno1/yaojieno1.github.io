@@ -113,7 +113,7 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/hof-22-malloc-fourth.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/hof-23-si.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/hof-24-rip-to-main.png">
-<meta property="og:updated_time" content="2019-12-14T19:40:55.047Z">
+<meta property="og:updated_time" content="2019-12-14T20:33:11.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【堆溢出】从一个例子学习 House of Force">
 <meta name="twitter:description" content="House of Foce 是堆溢出的一种简单利用方式，通过一个例子来学习下。 首先看下运行环境， Ubuntu 16.04.1 LTS x64 中 Ubuntu GLIBC 2.23-0ubuntu10 版本的 GLIBC。  再看下源码，有四次 malloc() 调用，中间夹着一次模拟溢出的内存改写。  上 gdb，调试走起，我们一句一句的看。  第一个 malloc：16现在是在调用第一个">
@@ -354,7 +354,7 @@
 <p><img src="/image/hof-07-main_arena-vmmap.png" alt="07-main_arena-vmmap"></p>
 <p>看看 <strong>0x602000</strong> 起始的这段堆内存的情况。</p>
 <p><img src="/image/hof-08-602000.png" alt="08-602000"></p>
-<p><strong>0x602000</strong> 到 <strong>0x60201F</strong> 的这32字节内存，就是 <strong>malloc(16)</strong> 所占用的堆内存。其中，前16个字节（<strong>0x602000</strong> ~ <strong>0x60200F</strong>）是 <strong>GLIBC</strong> 管理的堆头，后16个字节（<strong>0x602010</strong> ~ <strong>0x60201F</strong>）是返回给程序使用的空间，所以 <strong>malloc(16)</strong> 的返回值就是 <strong>0x602010</strong>。而 <strong>main_arena</strong> 的 <strong>top</strong> 指针指向空闲堆块的起始地址 <strong>0x602020</strong>。示意图如下：</p>
+<p><strong>0x602000</strong> 到 <strong>0x60201F</strong> 的这 <strong>32</strong> 字节内存，就是 <strong>malloc(16)</strong> 所占用的堆内存。其中，前 <strong>16</strong> 个字节（<strong>0x602000</strong> ~ <strong>0x60200F</strong>）是 <strong>GLIBC</strong> 管理的堆头，后 <strong>16</strong> 个字节（<strong>0x602010</strong> ~ <strong>0x60201F</strong>）是返回给程序使用的空间，所以 <strong>malloc(16)</strong> 的返回值就是 <strong>0x602010</strong>。而 <strong>main_arena</strong> 的 <strong>top</strong> 指针指向空闲堆块的起始地址 <strong>0x602020</strong>。示意图如下：</p>
 <p><img src="/image/hof-09-heap.png" alt="09-heap"></p>
 <h2 id="模拟溢出的内存改写"><a href="#模拟溢出的内存改写" class="headerlink" title="模拟溢出的内存改写"></a>模拟溢出的内存改写</h2><p>接下来源码的 <strong>10</strong> 和 <strong>11</strong> 两行，是模拟用溢出的方式修改空闲内存块的 <strong>size</strong> 大小为 <strong>全F</strong>。</p>
 <p><img src="/image/hof-10-line-10-11.png" alt="10-line-10-11"></p>
@@ -536,7 +536,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
