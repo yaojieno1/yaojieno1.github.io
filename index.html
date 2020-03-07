@@ -393,6 +393,7 @@
 <li>c) 使用 <code>jconsole</code> 连接，无需认证即可登录。可以直接查看 <code>tomcat</code> 的管理属性，以及调用 <code>tomcat</code> 和 <code>logback</code> 提供的 <code>MBeans</code> 操作接口。</li>
 </ul>
 <p><img src="/image/logback-22-jconsole.png" alt="jconsole"> </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>logback</code> 通过 <code>scan</code> 参数提供了配置文件的动态更新功能。如果可以覆盖这个配置文件，就可以实现XXE、JNDI、jmx等多种攻击方式了。</p>
 
           
         
