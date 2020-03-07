@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初步分析了一下 logbac">
+<meta name="description" content="来源：香依香偎@闻道解惑  logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初">
 <meta name="keywords" content="logback,rmi,xxe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="日志库logback的攻击路径">
 <meta property="og:url" content="http://www.yaowendao.com/2020/03/07/日志库logback的攻击路径/index.html">
 <meta property="og:site_name" content="闻道解惑">
-<meta property="og:description" content="logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初步分析了一下 logbac">
+<meta property="og:description" content="来源：香依香偎@闻道解惑  logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.yaowendao.com/image/logback-01-logo.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/logback-02-github.png">
@@ -111,10 +111,10 @@
 <meta property="og:image" content="http://www.yaowendao.com/image/logback-20-org-port-list.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/logback-21-new-port-list.png">
 <meta property="og:image" content="http://www.yaowendao.com/image/logback-22-jconsole.png">
-<meta property="og:updated_time" content="2020-03-07T08:37:41.167Z">
+<meta property="og:updated_time" content="2020-03-07T10:28:44.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="日志库logback的攻击路径">
-<meta name="twitter:description" content="logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初步分析了一下 logbac">
+<meta name="twitter:description" content="来源：香依香偎@闻道解惑  logbacklogback 是 log4j 创始人设计的另一个开源日志组件。相比 log4j，重构了内核的 logback 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。Github 上的数据显示，logback 被八千多个项目所使用，包括 springboot 在内的多个框架已经使用 logback 作为默认的日志组件。  初">
 <meta name="twitter:image" content="http://www.yaowendao.com/image/logback-01-logo.png">
 
 
@@ -335,7 +335,8 @@
       
 
       
-        <p><img src="/image/logback-01-logo.png" alt="logo"></p>
+        <p>来源：<a href="https://mp.weixin.qq.com/s/OBwxaijYCjnvo8I0OBusug" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><img src="/image/logback-01-logo.png" alt="logo"></p>
 <h2 id="logback"><a href="#logback" class="headerlink" title="logback"></a>logback</h2><p><code>logback</code> 是 <code>log4j</code> 创始人设计的另一个开源日志组件。相比 <code>log4j</code>，重构了内核的 <code>logback</code> 的优势在于性能更高（关键路径性能提升十倍）、内存占用更小、文档更完善、功能更全面等等。<code>Github</code> 上的数据显示，<code>logback</code> 被八千多个项目所使用，包括 <code>springboot</code> 在内的多个框架已经使用 <code>logback</code> 作为默认的日志组件。</p>
 <p><img src="/image/logback-02-github.png" alt="github"></p>
 <p>初步分析了一下 <code>logback</code> 库，有一些有趣的发现。</p>
@@ -352,7 +353,7 @@
 <p>获取配置文件之后，通过 <code>JoranConfigurator.doConfigure()</code> (实现在父类的<code>GenericConfigurator.doConfigure()</code>中) 读取 <code>xml</code> 配置文件，其中调用 <code>SaxEventRecorder.recordEvents()</code> 解析 <code>xml</code> 配置文件时存在 <code>XXE</code> 漏洞。</p>
 <p><img src="/image/logback-04-xxe-01.png" alt="xxe-01"> </p>
 <p><img src="/image/logback-05-xxe-02.png" alt="xxe-02"></p>
-<h2 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h2><p>通常情况下，配置文件的这一类 <code>XXE</code> 漏洞并不是大问题，毕竟配置文件只会在初始化的时候加载一次，攻击者没机会触发漏洞。但是 <code>logback</code> 库不一样。只要配置文件中配置了 <code>scan</code> 属性，它就会启动一个scan task监控配置文件的变动，支持配置文件变更时的自动加载。</p>
+<h2 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h2><p>通常情况下，配置文件的这一类 <code>XXE</code> 漏洞并不是大问题，毕竟配置文件只会在初始化的时候加载一次，攻击者没机会触发漏洞。但是 <code>logback</code> 库不一样。只要配置文件中配置了 <code>scan</code> 属性，它就会启动一个 <code>scan task</code> 监控配置文件的变动，支持配置文件变更时的自动加载。</p>
 <p><img src="/image/logback-06-scantask.png" alt="scan-task"></p>
 <p><img src="/image/logback-07-scan-doc.png" alt="scan-doc"></p>
 <p>也就是说，我们有机会通过上传覆盖 <code>logback</code> 的 <code>xml</code> 配置文件来触发 <code>XXE</code> 漏洞。触发条件是：</p>
