@@ -316,7 +316,8 @@
       
         
           
-            <p><img src="/image/kylin-01-logo.png" alt="apache-kylin"></p>
+            <p>来源：<a href="https://mp.weixin.qq.com/s/QzlHYST0kIqjNV-hnosyAw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+<p><img src="/image/kylin-01-logo.png" alt="apache-kylin"></p>
 <h2 id="零、CVE-2020-1956"><a href="#零、CVE-2020-1956" class="headerlink" title="零、CVE-2020-1956"></a>零、CVE-2020-1956</h2><p>2020年5月22日，<strong>CNVD</strong> 通报了 <strong>Apache Kylin</strong> 存在命令注入漏洞 <strong>CVE-2020-1956</strong>，地址在 <a href="http://www.cnnvd.org.cn/web/xxk/ldxqById.tag?CNNVD=CNNVD-202005-1133" target="_blank" rel="noopener">http://www.cnnvd.org.cn/web/xxk/ldxqById.tag?CNNVD=CNNVD-202005-1133</a> 。</p>
 <blockquote>
 <p><strong>Apache Kylin</strong> 是美国 <strong>Apache</strong> 软件基金会的一款开源的分布式分析型数据仓库。该产品主要提供 <strong>Hadoop/Spark</strong> 之上的 <strong>SQL</strong> 查询接口及多维分析（<strong>OLAP</strong>）等功能。</p>
@@ -332,11 +333,11 @@
 <h2 id="二、Migrate-Cube"><a href="#二、Migrate-Cube" class="headerlink" title="二、Migrate Cube"></a>二、Migrate Cube</h2><p>这个漏洞的补丁代码在 <strong>github</strong> 上，地址是 <a href="https://github.com/apache/kylin/commit/9cc3793ab2f2f0053c467a9b3f38cb7791cd436a#" target="_blank" rel="noopener">https://github.com/apache/kylin/commit/9cc3793ab2f2f0053c467a9b3f38cb7791cd436a#</a> 。</p>
 <p><img src="/image/kylin-04-patch-code.png" alt="patch-code"></p>
 <p>从补丁代码里可以看出，漏洞点在 <strong>CubeService</strong> 中的 <strong>migrateCube()</strong> 函数，漏洞原因是使用 <strong>String.format()</strong> 格式化待执行的系统命令且未做过滤，导致命令内容可被注入，涉及的参数包括 <strong>srcCfgUri</strong>、<strong>dstCfgUri</strong>、<strong>projectName</strong>三个。</p>
-<p><strong>Migrate Cube</strong> 是什么？在官网的文档的 Restful 章节中，可以看到这个 Restful接口的描述</p>
+<p><strong>Migrate Cube</strong> 是什么？在官网的文档的 Restful 章节 <a href="http://kylin.apache.org/cn/docs/howto/howto_use_restapi.html#migrate-cube" target="_blank" rel="noopener">http://kylin.apache.org/cn/docs/howto/howto_use_restapi.html#migrate-cube</a> 中，可以看到这个 Restful接口的描述：</p>
 <p><img src="/image/kylin-05-migrate-cube-doc.png" alt="migrate-cube-doc"></p>
 <p>接口中显示需要两个路径入参，分别是 <strong>cube</strong> 和 <strong>project</strong>。回看 <strong>kylin</strong> 页面上的表格里，已经显示了 <strong>cube name</strong> 和对应的 <strong>Project</strong> 。</p>
 <p><img src="/image/kylin-03-models.png" alt="kylin-models"></p>
-<p>我们选择第一行记录中的<strong>cube</strong>：<strong>kylin_sales_cube</strong> 和对应的 <strong>Project</strong>：<strong>learn_kylin</strong> 作为路径参数，POST 这个报文看看。</p>
+<p>我们选择第一行记录中的 <strong>cube</strong>：<strong>kylin_sales_cube</strong> 和对应的 <strong>Project</strong>：<strong>learn_kylin</strong> 作为路径参数，POST 这个报文看看。</p>
 <p><img src="/image/kylin-06-first-post.png" alt="kylin-first-post"></p>
 <p>收到错误响应，提示 <strong>One click migration is disable</strong>。</p>
 <p><a href="/image/kylin-07-first-post-response.png">first-post-response</a></p>
