@@ -89,49 +89,49 @@
 <meta property="og:site_name" content="闻道解惑">
 <meta property="og:description" content="来源：香依香偎@闻道解惑 fastjson 是阿里巴巴开源的，使用 Java 语言编写的 JSON 解析库，项目地址是 https://github.com/alibaba/fastjson，以速度快、性能高著称，使用范围非常广。 在2017年3月15日，Fastjson 官方主动爆出 Fastjson 在 1.2.24 及之前版本存在远程代码执行高危安全漏洞。本文对这个漏洞的POC进行分析。 零">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/01-User.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/01-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/01-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/01-JavaBeanInfo.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/02-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/02-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/03-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/03-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/04-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/04-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/04-deserializemap.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/05-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/05-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/06-App.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/06-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-01.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-02.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-03.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-04.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/07-exploit.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/07-poc.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/07-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/08-exploit.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/08-poc.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/08-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-01.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-02.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-Poc.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-result.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/12-1.2.41-autoType-close.ong.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/12-1.2.41-checkautotype.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/12-denyList.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/13-open-autotype.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/13-denyList-block.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass-L.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/15-Lcom.sun.rowset.JdbcRowSetImpl-.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/15-result.png">
-<meta property="og:updated_time" content="2020-11-22T17:57:20.571Z">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-User.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-JavaBeanInfo.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/02-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/02-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/03-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/03-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/04-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/04-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/04-deserializemap.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/05-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/05-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/06-App.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/06-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-01.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-02.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-03.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-04.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/07-exploit.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/07-poc.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/07-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/08-exploit.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/08-poc.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/08-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-01.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-02.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-Poc.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-result.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/12-1.2.41-autoType-close.ong.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/12-1.2.41-checkautotype.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/12-denyList.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/13-open-autotype.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/13-denyList-block.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass-L.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/15-Lcom.sun.rowset.JdbcRowSetImpl-.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/15-result.png">
+<meta property="og:updated_time" content="2020-11-22T18:07:37.812Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastjson 反序列化漏洞POC分析">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 fastjson 是阿里巴巴开源的，使用 Java 语言编写的 JSON 解析库，项目地址是 https://github.com/alibaba/fastjson，以速度快、性能高著称，使用范围非常广。 在2017年3月15日，Fastjson 官方主动爆出 Fastjson 在 1.2.24 及之前版本存在远程代码执行高危安全漏洞。本文对这个漏洞的POC进行分析。 零">
-<meta name="twitter:image" content="http://yaowendao.cn-bj.ufileos.com/01-User.png">
+<meta name="twitter:image" content="https://yaowendao.cn-bj.ufileos.com/01-User.png">
 
 
 
@@ -359,11 +359,11 @@
 •    private 元素 age   和它的 setter 函数
 •    private 元素 prop  和它的 getter 函数
 •    private 元素 grade 和它的 getter 函数
-</code></pre><p><img src="http://yaowendao.cn-bj.ufileos.com/01-User.png" alt="01-User.png"></p>
+</code></pre><p><img src="https://yaowendao.cn-bj.ufileos.com/01-User.png" alt="01-User.png"></p>
 <p>接下来使用 <code>JSON.parseObject()</code>，用指定类型的方式将这个类反序列化出来。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/01-App.png" alt="01-App.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/01-App.png" alt="01-App.png"></p>
 <p>运行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/01-result.png" alt="01-result.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/01-result.png" alt="01-result.png"></p>
 <p>从结果上看，我们可以得出以下结论：</p>
 <pre><code>•    User 对象的无参构造函数被调用
 •    public String name 被成功的反序列化
@@ -382,39 +382,39 @@
 ◦    是AtomicBoolean
 ◦    是AtomicInteger
 ◦    是AtomicLong
-</code></pre><p><img src="http://yaowendao.cn-bj.ufileos.com/01-JavaBeanInfo.png" alt="01-JavaBeanInfo"></p>
+</code></pre><p><img src="https://yaowendao.cn-bj.ufileos.com/01-JavaBeanInfo.png" alt="01-JavaBeanInfo"></p>
 <p>回到前面的问题。<code>prop</code> 的 <code>getter</code> 函数 <code>getProp()</code> 满足上面的条件，它的返回类型 <code>Properties</code> 继承自 <code>Map</code> ，因此可以成功的被调用。而 <code>grade</code> 的 <code>getter</code> 函数 <code>getGrade()</code> 的返回类型 <code>String</code> 不满足返回类型的那个条件，因此没有被调用，<code>grade</code> 也无法被赋值。</p>
 <p>那么，在反序列化的时候，向 <code>grade</code> 这样无法通过 <code>setter</code> 或 <code>getter</code> 函数进行赋值的 <code>private</code> 元素，有什么方法可以赋值呢？有。就是使用 <code>FEATURE.SupportNonPublicField</code>。</p>
 <p>在 <code>JSON.parseObject()</code> 中使用 <code>fastjson</code> 的标签 <code>FEATURE.SupportNonPublicField</code>：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/02-App.png" alt="02-App"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/02-App.png" alt="02-App"></p>
 <p>执行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/02-result.png" alt="02-result"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/02-result.png" alt="02-result"></p>
 <p><code>grade</code> 已经成功被反序列化，此时 <code>grade</code> 的 <code>getter</code> 函数 <code>getGrade()</code> 并没有被调用。</p>
 <p><code>FEATURE.SupportNonPublicField</code> 从 <code>fastjson</code> 的 <code>1.2.22</code> 版本开始引入。</p>
 <p>还有个疑问：上面的 <code>App.java</code> 中，<code>json string</code> 中使用 <code>@type</code> 标签指定了反序列化的目标类型为 <code>com.xiang.fastjson.poc.User</code>，在调用 <code>JSON.parseObject()</code> 时也指定了目标类型是 <code>User.class</code>。那如果这两个类型不一致，会发生什么？</p>
 <p>需要说明的是，只要 <code>JSON.parseObject()</code> 的第二个参数中指定的类，与 <code>json string</code> 中 <code>@type</code> 指定的类之间存在继承或转换关系，那么这个反序列化就会成功执行。比如把 <code>JSON.parseObject()</code> 的第二个参数设为 <code>Object.class</code>（也就是所有类的基类），那么反序列化就不会因为类型不匹配而失败。如果把第二个参数设为 <code>String.class</code>，那么所有支持 <code>toString()</code> 方法的类同样可以序列化成功。</p>
 <p>但是如果两个类之间没有关联关系，那么反序列化的时候，是会直接返回错误拒绝反序列化，还是将对象反序列化完成再进行类型转换呢？</p>
 <p>这个答案是：不确定。比如，我们修改 <code>App.java</code>，将 <code>JSON.parseObject()</code> 的第二个参数换成 <code>Integer.class</code>，<code>json string</code> 中仍然保持 <code>com.xiang.fastjson.poc.User</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/03-App.png" alt="03-App"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/03-App.png" alt="03-App"></p>
 <p>执行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/03-result.png" alt="03-result"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/03-result.png" alt="03-result"></p>
 <p>从结果看，<code>fastjson</code> 先按照 <code>json string</code> 中的 <code>@type</code> 将对象反序列化出来，然后再转换为 <code>JSON.parseObject()</code> 中指定的目标类型。即便两个类型不一致，<code>json string</code> 指定的对象对应的 <code>getter</code> 和 <code>setter</code> 函数也一样会被调用。</p>
 <p>再换一下，把 <code>JSON.parseObject()</code> 的第二个参数换成 <code>ASMUtils.class</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/04-App.png" alt="04-App"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/04-App.png" alt="04-App"></p>
 <p>执行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/04-result.png" alt="04-result"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/04-result.png" alt="04-result"></p>
 <p>这一次的结果上，<code>fastjson</code> 却首先检查了两个类型是否匹配，不匹配直接抛出异常，没有调用各个字段的方法进行反序列化操作。</p>
 <p><code>fastjson</code> 内置了一些常用类的反序列化处理类，这些常用类的列表在 <code>ParseConfig.java</code> 中可以看到。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/04-deserializemap.png" alt="04-deserializemap"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/04-deserializemap.png" alt="04-deserializemap"></p>
 <p>其中有一些处理类中（比如<code>Integer</code>、<code>BigInteger</code>等）没有检查类型是否匹配，就直接进行反序列化处理；有一些没有进行检查，但是反序列化过程会因为语法错误而失败。而对于大多数不属于常用类的情况，<code>fastjson</code> 是会进行检查不同类型之间的关联关系的（如上面的<code>ASMUtils</code>）。</p>
 <p>好吧，这一部分太晕了。有没有更简单一些的用法，不用考虑这些匹配原则？有，就是 <code>JSON.parse()</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/05-App.png" alt="05-App"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/05-App.png" alt="05-App"></p>
 <p>执行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/05-result.png" alt="05-result"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/05-result.png" alt="05-result"></p>
 <p>同样也支持 <code>Feature.SupportNonPublicField</code> 设置。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/06-App.png" alt="06-App"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/06-App.png" alt="06-App"></p>
 <p>执行结果是：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/06-result.png" alt="06-result"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/06-result.png" alt="06-result"></p>
 <p>可以看到，<code>JSON.parse()</code>，完全是按照 <code>json string</code> 中指定的类进行反序列化，不用考虑指定目标类的情况，因此可能是更广泛的用法吧。不过少了一次类型检查，也会引入更多的安全风险。</p>
 <h2 id="一、TemplatesImpl-POC分析"><a href="#一、TemplatesImpl-POC分析" class="headerlink" title="一、TemplatesImpl POC分析"></a>一、TemplatesImpl POC分析</h2><p>首先是 <code>TemplatesImpl</code> 的 POC，来自于 <a href="http://xxlegend.com/2017/04/29/title-%20fastjson%20远程反序列化poc的构造和分析/" target="_blank" rel="noopener">廖神</a>。</p>
 <p>这个 POC 的入口点在 <code>TemplatesImpl</code> 类中 <code>getOutputPerpeties()</code> 函数。由于 <code>TemplatesImpl</code> 的 <code>private</code> 元素 <code>_outputProperties</code> 只有 <code>getter</code> 没有 <code>setter</code> ，同时其 <code>getter</code> 函数的返回类型 <code>Properties</code> 又继承自 <code>Map</code>，因此这个 <code>getter</code> 函数 <code>getOutputProperties()</code> 满足前面说的调用条件，可以被 <code>fastjson</code> 反序列化 <code>TemplatesImpl</code> 时调用到 。POC 的调用链是：</p>
@@ -430,20 +430,20 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-01.png" alt="09-templatesimpl-01.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-02.png" alt="09-templatesimpl-02.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-03.png" alt="09-templatesimpl-03.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/09-templatesimpl-04.png" alt="09-templatesimpl-04.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-01.png" alt="09-templatesimpl-01.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-02.png" alt="09-templatesimpl-02.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-03.png" alt="09-templatesimpl-03.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/09-templatesimpl-04.png" alt="09-templatesimpl-04.png"></p>
 <p>POC 代码如下：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/07-exploit.png" alt="07-exploit.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/07-poc.png" alt="07-poc.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/07-exploit.png" alt="07-exploit.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/07-poc.png" alt="07-poc.png"></p>
 <p>执行之后成功弹出计算器：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/07-result.png" alt="07-result.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/07-result.png" alt="07-result.png"></p>
 <p>上面的POC中，<code>Exploit</code> 类继承自 <code>AbstractTranslet</code>。如果不让 <code>Exploit</code> 类继承也可以，只要在 json str 中，<code>_outputProperties</code> 之前增加 <code>_transletIndex</code> 和 <code>_auxClasses</code> 的设置就好了。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/08-exploit.png" alt="08-exploit.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/08-poc.png" alt="08-poc.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/08-exploit.png" alt="08-exploit.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/08-poc.png" alt="08-poc.png"></p>
 <p>执行之后同样弹出计算器：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/08-result.png" alt="08-result.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/08-result.png" alt="08-result.png"></p>
 <p><code>TemplatesImpl</code> 的 POC，在利用的时候有几个限制：</p>
 <ol>
 <li>由于 POC 中关键元素 <code>_bytecode</code> 没有对应的 <code>public</code> 的 <code>getter</code> 和 <code>setter</code> 函数，因此需要服务器上解析 json 的时候，不管是使用 <code>JSON.parse()</code> 还是使用 <code>JSON.parseObject()</code>，都需要设置 <code>Feature.SupportNonPublicField</code> 。</li>
@@ -461,13 +461,13 @@
 </ul>
 </li>
 </ul>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-01.png" alt="10-JdbcRowSetImpl-01.png"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-02.png" alt="10-JdbcRowSetImpl-02.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-01.png" alt="10-JdbcRowSetImpl-01.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/10-JdbcRowSetImpl-02.png" alt="10-JdbcRowSetImpl-02.png"></p>
 <p>需要设置的属性只有 <code>dataSourceName</code> 和 <code>autoCommit</code> 两个。由于它们的 <code>setter</code> 函数 <code>setDataSourceName()</code> 和 <code>setAutoCommit()</code> 都是 <code>public</code> 类型，因此这里 <em>不需要设置</em> <code>SupportNonPublicField</code> 属性 ，可以直接触发。</p>
 <p>POC代码为</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-Poc.png" alt="11-JdbcRowSetImpl-Poc.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-Poc.png" alt="11-JdbcRowSetImpl-Poc.png"></p>
 <p>搭建好 RMI 的环境之后，执行 POC ，成功弹出计算器。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-result.png" alt="11-JdbcRowSetImpl-result.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/11-JdbcRowSetImpl-result.png" alt="11-JdbcRowSetImpl-result.png"></p>
 <p><code>JdbcRowSetImpl</code> 的 POC，使用限制为：<br>    1    <code>fastjson</code> 的版本范围为 <code>1.2.24</code> 及以下的所有版本。<br>    2    如果目的服务器使用的是 <code>JSON.parseObject()</code>，那么第二个参数必须是和 <code>JdbcRowSetImpl</code> 不冲突的类，比如 <code>Object.class</code>，<code>String.class</code>，<code>Integer.class</code> 等。</p>
 <h2 id="三、fastjson-的修复"><a href="#三、fastjson-的修复" class="headerlink" title="三、fastjson 的修复"></a>三、fastjson 的修复</h2><p>反序列化漏洞的修补，通常都是通过白名单或黑名单的形式，禁止具有恶意功能的类进行反序列化。<code>fastjson</code> 使用的是黑名单的方式，具体而言就是从 1.2.25 版本开始，<code>fastjson</code> 增加了两个处理：</p>
 <ol>
@@ -475,11 +475,11 @@
 <li>默认开启了黑名单，危险类所在的包不允许进行反序列化。</li>
 </ol>
 <p>我们将 <code>fastjson</code> 升级到最新的 1.2.41 版本，再执行上面 <code>JdbcRowSetImpl</code> 的 POC，结果是直接抛了异常：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/12-1.2.41-autoType-close.ong.png" alt="12-1.2.41-autoType-close.ong.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/12-1.2.41-autoType-close.ong.png" alt="12-1.2.41-autoType-close.ong.png"></p>
 <p>查看抛异常的地方，</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/12-1.2.41-checkautotype.png" alt="12-1.2.41-checkautotype.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/12-1.2.41-checkautotype.png" alt="12-1.2.41-checkautotype.png"></p>
 <p>查看denyList的定义，可以找到目前定义的黑名单列表。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/12-denyList.png" alt="12-denyList.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/12-denyList.png" alt="12-denyList.png"></p>
 <pre><code>•    bsh
 •    com.mchange
 •    com.sun.
@@ -507,17 +507,17 @@
 <h2 id="四、denyList-黑名单的绕过"><a href="#四、denyList-黑名单的绕过" class="headerlink" title="四、denyList 黑名单的绕过"></a>四、denyList 黑名单的绕过</h2><p><code>fastjson</code> 修补之后默认关闭了 <code>autoType</code> 功能，同时开启了黑名单。</p>
 <p>但是这个黑名单功能的实现还是有问题的。在 <code>autoType</code> 功能打开的情况下（总有些偷懒的开发人员会这么干的），我们可以绕过这个黑名单的限制。</p>
 <p>首先，我们通过命令行参数 <code>-Dfastjson.parser.autoTypeSupport=true</code> 的方式开启 <code>autoType</code> 功能，执行一下 <code>JdbcRowSetImplPoc</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/13-open-autotype.png" alt="13-open-autotype.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/13-open-autotype.png" alt="13-open-autotype.png"></p>
 <p>在 ParserConfig 的 880 行抛出异常。查看代码，这次是被黑名单 denyList 给拦截了。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/13-denyList-block.png" alt="13-denyList-block.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/13-denyList-block.png" alt="13-denyList-block.png"></p>
 <p>继续往下看，在 926 行调用了 <code>TypeUtils.loadClass()</code> 来反序列化生成类。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass.png" alt="14-TypeUtils-loadClass.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass.png" alt="14-TypeUtils-loadClass.png"></p>
 <p>点进去看看，在 <code>TypeUtils</code> 的 1143 行，对于类名由 <code>L</code> 和 <code>;</code> 包装的情况下，这里会直接去掉类名前后的 <code>L</code> 和 <code>;</code>，然后再 <code>loadClass()</code> ！</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass-L.png" alt="14-TypeUtils-loadClass-L.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/14-TypeUtils-loadClass-L.png" alt="14-TypeUtils-loadClass-L.png"></p>
 <p>这就意味着，我们只需要将 json string 中的类名前后增加 <code>L</code> 和 <code>;</code>，也就是把 POC 中 <code>@type</code> 的值从 <code>com.sun.rowset.JdbcRowSetImpl</code> 改成 <code>Lcom.sun.rowset.JdbcRowSetImpl;</code> ，就能绕过黑名单的检查，同时也能完成 <code>JdbcRowSetImpl</code> 的反序列化！</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/15-Lcom.sun.rowset.JdbcRowSetImpl-.png" alt="15-Lcom.sun.rowset.JdbcRowSetImpl-.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/15-Lcom.sun.rowset.JdbcRowSetImpl-.png" alt="15-Lcom.sun.rowset.JdbcRowSetImpl-.png"></p>
 <p>用命令行参数 <code>-Dfastjson.parser.autoTypeSupport=true</code> 开启 <code>autoType</code> 功能，再执行一下新的 <code>JdbcRowSetImplPoc</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/15-result.png" alt="15-result.png"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/15-result.png" alt="15-result.png"></p>
 <p>成功！</p>
 
       

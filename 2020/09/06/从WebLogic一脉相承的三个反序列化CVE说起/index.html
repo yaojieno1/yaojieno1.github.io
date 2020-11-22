@@ -89,32 +89,32 @@
 <meta property="og:site_name" content="闻道解惑">
 <meta property="og:description" content="Java 反序列化漏洞的利用有两个条件。首先是漏洞点，也就是将攻击者可控的内容传递给 ObjectInputStream.readObject() 函数的调用链；另一个条件是gadget，也就是从某个类的反序列化入口函数 readObject() 开始，一步步执行到危险函数的调用链。  WebLogic 对于 T3 协议和 IIOP 协议的处理，天然就会进行反序列化的漏洞点。因此，对于 WebLo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-02-ysoserial-badattribute.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-03-limitfilter.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-04-valueextractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-05-extract-implementations.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-06-chainedExtractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-07-reflectionExtractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-08-chainedTransformer.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-09-invokerTransformer.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-10-callstack.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-11-mvelExtract.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-12-callstack-mvelExtract.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-13-multiExtractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-14-callstack-multiExtractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-15-extractorComparator.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-16-jdk-compartor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-17-ysoserial-PriorityQueue.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-18-callstack-extractComparator.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-19-universalExtractor.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-20-universalExtractor-extractComplex.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-21-callstack-universalExtractor.png">
-<meta property="og:updated_time" content="2020-11-22T17:57:20.571Z">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-02-ysoserial-badattribute.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-03-limitfilter.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-04-valueextractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-05-extract-implementations.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-06-chainedExtractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-07-reflectionExtractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-08-chainedTransformer.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-09-invokerTransformer.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-10-callstack.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-11-mvelExtract.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-12-callstack-mvelExtract.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-13-multiExtractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-14-callstack-multiExtractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-15-extractorComparator.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-16-jdk-compartor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-17-ysoserial-PriorityQueue.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-18-callstack-extractComparator.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-19-universalExtractor.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-20-universalExtractor-extractComplex.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-21-callstack-universalExtractor.png">
+<meta property="og:updated_time" content="2020-11-22T18:07:37.813Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 WebLogic 一脉相承的三个反序列化 CVE 说起">
 <meta name="twitter:description" content="Java 反序列化漏洞的利用有两个条件。首先是漏洞点，也就是将攻击者可控的内容传递给 ObjectInputStream.readObject() 函数的调用链；另一个条件是gadget，也就是从某个类的反序列化入口函数 readObject() 开始，一步步执行到危险函数的调用链。  WebLogic 对于 T3 协议和 IIOP 协议的处理，天然就会进行反序列化的漏洞点。因此，对于 WebLo">
-<meta name="twitter:image" content="http://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png">
+<meta name="twitter:image" content="https://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png">
 
 
 
@@ -339,21 +339,21 @@
 <p>2020年的1月、4月和7月， <code>WebLogic</code> 先后爆出了三个一脉相承的反序列化 <code>CVE</code>，涉及了七个 <code>gadget</code>。下面简单分析一下这三个 <code>CVE</code> 以及相关的 <code>gadget</code>。</p>
 <h2 id="CVE-2020-2555"><a href="#CVE-2020-2555" class="headerlink" title="CVE-2020-2555"></a>CVE-2020-2555</h2><p>2020年1月，<code>CVE-2020-2555</code> 被公开。这个反序列化 <code>gadget</code> 有三条利用链。</p>
 <p>首先都是利用了 <code>JDK</code> 中的 <code>BadAttributeValueExpException</code>。这个类的特点是可以将对 <code>readObject()</code> 的调用，转换成对 <code>toString()</code> 函数的调用。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png" alt="01-badattributevalue"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-01-badattributevalue.png" alt="01-badattributevalue"></p>
 <p><code>BadAttributeValueExpException</code> 的这个特性，可以显著扩大反序列化 <code>gadget</code> 的范围，因此反序列化利用工具 <code>ysoserial</code> 中，有五条利用链都使用这个类作为入口。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-02-ysoserial-badattribute.png" alt="02-ysoserial-badattribute"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-02-ysoserial-badattribute.png" alt="02-ysoserial-badattribute"></p>
 <p>经过从 <code>readObject()</code> 到 <code>toString()</code> 的转换之后，找到真正的入口函数：<code>LimitFilter.toString()</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-03-limitfilter.png" alt="03-limitfilter"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-03-limitfilter.png" alt="03-limitfilter"></p>
 <p>函数中调用的两处 <code>extracotor.extract()</code> 函数来自接口 <code>ValueExtractor</code>.</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-04-valueextractor.png" alt="04-valueextractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-04-valueextractor.png" alt="04-valueextractor"></p>
 <p>搜索一下这个接口函数的实现，共29个。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-05-extract-implementations.png" alt="05-extract-implementation"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-05-extract-implementations.png" alt="05-extract-implementation"></p>
 <p><code>CVE-2020-2555</code> 的第一个调用链，利用了 <code>ChainedExtractor</code> 和 <code>ReflectionExtractor</code> 的两个 <code>extract()</code> 函数实现。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-06-chainedExtractor.png" alt="06-chainedExtractor"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-07-reflectionExtractor.png" alt="07-reflectionExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-06-chainedExtractor.png" alt="06-chainedExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-07-reflectionExtractor.png" alt="07-reflectionExtractor"></p>
 <p>这两个实现可以完美的串起一条利用链，和 <code>ysoserial</code> 里 <code>CommonsCollections1</code> 利用链中所使用的 <code>ChainedTransformer.transform()</code> 和 <code>InvokerTransformer.transform()</code> 几乎一模一样。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-08-chainedTransformer.png" alt="08-chainedTransformer"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-09-invokerTransformer.png" alt="09-invokerTransformer"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-08-chainedTransformer.png" alt="08-chainedTransformer"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-09-invokerTransformer.png" alt="09-invokerTransformer"></p>
 <p>因此我们可以构造出 <code>POC</code>，基本原则是：</p>
 <ul>
 <li><p>1、使用 <code>BadAttributeValueExpException</code> 作为反序列化的入口类，从而调用到 <code>toString()</code></p>
@@ -366,24 +366,24 @@
 </li>
 </ul>
 <p>最终的调用栈如下：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-10-callstack.png" alt="10-callstack"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-10-callstack.png" alt="10-callstack"></p>
 <p><code>CVE-2020-2555</code> 的第二条利用链，同样来自上面 <code>29</code> 个 <code>ValueExtractor.extract()</code> 的实现类之一：<code>MvelExtractor</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-11-mvelExtract.png" alt="11-mvelExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-11-mvelExtract.png" alt="11-mvelExtractor"></p>
 <p>熟悉 <code>MVEL</code> 的你应该一眼就看出了利用方法，只要使用 <code>MvelExtractor</code> 替换掉前一个利用链的 <code>3</code>、<code>4</code>两步就可以了。最终调用栈如下：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-12-callstack-mvelExtract.png" alt="12-callstack-mvelExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-12-callstack-mvelExtract.png" alt="12-callstack-mvelExtractor"></p>
 <p>第三条利用链，同样来自上面 <code>29</code> 个实现类之一：<code>MultiExtractor</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-13-multiExtractor.png" alt="13-multiExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-13-multiExtractor.png" alt="13-multiExtractor"></p>
 <p>由于 <code>MultiExtractor.extract()</code> 函数中没有链式调用，因此我们可以将 <code>MultiExtractor</code> 作为连接第一条利用链中 <code>LimitFilter.toString()</code> 和 <code>ChainedExtractor.extract()</code> 的桥梁。<code>LimitFilter.toString()</code> 间接通过 <code>MultiExtractor.extract()</code> 调用到 <code>ChainedExtractor.extract()</code> 中。最终的调用栈如下：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-14-callstack-multiExtractor.png" alt="14-callstack-multiExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-14-callstack-multiExtractor.png" alt="14-callstack-multiExtractor"></p>
 <p>至于修复补丁，<code>Oracle</code> 打在了 <code>LimitFilter.toString()</code> 函数里。这个修复很神奇，仅仅封锁了三条调用链的入口，而从 <code>MultiExtractor.extract()</code> 经过 <code>ChainedExtractor.extract()</code> 调用到 <code>ReflectionExtractor.extract()</code> 的利用链、以及<code>MvelExtractor.extract()</code> 的利用链依然存在，只要再找一个入口就好了。</p>
 <h2 id="CVE-2020-2883"><a href="#CVE-2020-2883" class="headerlink" title="CVE-2020-2883"></a>CVE-2020-2883</h2><p><code>2020</code> 年 <code>4</code> 月，<code>CVE-2020-2883</code> 被公开。同样的三条利用链，只是更换了入口函数。</p>
 <p>前面说到，入口函数 <code>LimitFilter.toString()</code> 被修补，我们需要寻找一个新的入口。这个新入口同样可以在反序列化的时候，调用到 <code>ValueExtract.extract()</code> 中。</p>
 <p>很快，大神们就找到了：<code>ExtractorCompartor.compare()</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-15-extractorComparator.png" alt="15-extractorComparator"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-15-extractorComparator.png" alt="15-extractorComparator"></p>
 <p><code>ExtractorComparator.compare()</code> 其实是对 <code>jdk</code> 中 <code>Comparator.compare()</code> 这个接口函数的实现。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-16-jdk-compartor.png" alt="16-jdk-comparator"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-16-jdk-compartor.png" alt="16-jdk-comparator"></p>
 <p>那么，怎么从 <code>readObject()</code> 调用到 <code>Comparator.compare()</code> 函数呢？ <code>ysoserial</code> 早就给出了答案：<code>PriorityQueue</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-17-ysoserial-PriorityQueue.png" alt="17-ysoserial-PriorityQueue"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-17-ysoserial-PriorityQueue.png" alt="17-ysoserial-PriorityQueue"></p>
 <p>调用链如下：</p>
 <pre><code>PriorityQueue.readObject()
 
@@ -405,14 +405,14 @@
 </ul>
 <p>这样就能顺利绕过 <code>CVE-2020-2555</code> 的补丁修复，构成了三条换汤不换药的新利用链。</p>
 <p>以第一条利用链为例，最终的调用栈如下。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-18-callstack-extractComparator.png" alt="18-callstack-extractComparator"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-18-callstack-extractComparator.png" alt="18-callstack-extractComparator"></p>
 <p>至于修复补丁，<code>Oracle</code> 并没有封禁利用链条上的 <code>PriorityQueue</code> 和 <code>ExtractComparator</code> ，只是将 <code>ReflectionExtractor</code> 和 <code>MvelExtractor</code> 放到了反序列化黑名单中。</p>
 <p>仔细看下 <code>CVE-2020-2883</code> 的几个调用栈，从 <code>PriorityQueue.readObject()</code> 到 <code>ExtractorComparator.compare()</code> 再到 <code>ValueExtractor.extract()</code> 的利用链仍然存在，所以只需要在 29 个实现类中再找一个新的利用类就可以完成不定的绕过。</p>
 <h2 id="CVE-2020-14645"><a href="#CVE-2020-14645" class="headerlink" title="CVE-2020-14645"></a>CVE-2020-14645</h2><p>腾讯蓝军很快就找到了新的可利用的实现类 <code>UniversalExtractor</code>。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-19-universalExtractor.png" alt="19-UniversalExtractor"></p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-20-universalExtractor-extractComplex.png" alt="20-UniversalExtractor-extractCommplex"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-19-universalExtractor.png" alt="19-UniversalExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-20-universalExtractor-extractComplex.png" alt="20-UniversalExtractor-extractCommplex"></p>
 <p>只是这里在调用 <code>method.invoke()</code> 时存在限制条件，函数名称必须是 <code>get</code>或 <code>is</code> 起始。因此可以利用那些已知的 <code>Json</code> 反序列化 <code>gadget</code> 链进行攻击。最终的调用栈如下：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/weblogic-21-callstack-universalExtractor.png" alt="21-callstack-universalExtractor"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/weblogic-21-callstack-universalExtractor.png" alt="21-callstack-universalExtractor"></p>
 <h2 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h2><p>通常寻找反序列化 <code>gadget</code>，不论是用工具搜索还是手工进行，我们会将 <code>readObject()</code> 作为 <code>source</code>，将那些危险函数（如<code>method.invoke()</code>、<code>Runtime.exec()</code>、<code>FileOutputStream.write()</code>等）作为 <code>sink</code>进行查找。但其实，在 <code>Java</code> 纷繁复杂的各种依赖库中，已经存在了许许多多的代码链片段可以利用。例如 <code>BadAttributeValueExpException</code> 将 <code>toString()</code> 纳入了利用链，<code>PriorityQueue</code> 将 <code>compare()</code> 纳入了利用链，<code>ExtractorComparator</code> 将 <code>extract()</code> 纳入了利用链，等等等等。在搜索的时候，将这些扩展出的利用链作为 <code>source</code> 或 <code>sink</code>，会大大增加搜索的范围，也很可能会发现新的世界。</p>
 <p>另一方面，对于漏洞的修复者而言，并不是堵住了入口就算修复了漏洞，而是要全方位封锁调用链上的方方面面，否则就会向 <code>Oracle</code> 一样留下永远补不完的 <code>CVE</code>。</p>
 

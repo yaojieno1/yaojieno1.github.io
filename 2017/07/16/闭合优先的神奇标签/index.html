@@ -89,18 +89,18 @@
 <meta property="og:site_name" content="闻道解惑">
 <meta property="og:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/03-noframes-src.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/05-tags-txt.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/06-showtag-py.png">
-<meta property="og:image" content="http://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png">
-<meta property="og:updated_time" content="2020-11-22T17:57:20.571Z">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/03-noframes-src.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/05-tags-txt.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/06-showtag-py.png">
+<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png">
+<meta property="og:updated_time" content="2020-11-22T18:07:37.812Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="闭合优先的神奇标签">
 <meta name="twitter:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta name="twitter:image" content="http://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
+<meta name="twitter:image" content="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
 
 
 
@@ -322,22 +322,22 @@
       
         <p>来源：<a href="https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
 <h2 id="noframes"><a href="#noframes" class="headerlink" title="noframes"></a>noframes</h2><p>先看一段 HTML：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/01-noframes-html.png" alt="01-noframes-html"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png" alt="01-noframes-html"></p>
 <p>不过是展示了一张图片而已。用浏览器打开看看。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png" alt="02-noframes-alert"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png" alt="02-noframes-alert"></p>
 <p>咦？怎么弹框了？看看浏览器处理的源码。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/03-noframes-src.png" alt="03-noframes-src"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/03-noframes-src.png" alt="03-noframes-src"></p>
 <p>原来，<strong>img</strong> 标签 <strong>src</strong> 属性里的 <strong>\&lt;/noframes></strong>，跳过了 <strong>\&lt;img></strong> 标签和 <strong>src</strong> 属性，把外层的 <strong>\&lt;noframes></strong> 给闭合了，导致 <strong>src</strong> 后半部分的 <strong>script</strong> 标签被解析成了 HTML，从而触发了弹框。</p>
 <p>这可奇怪了。<strong>\&lt;/noframes></strong> 明明在双引号里面，怎么就跨越了<strong>src</strong> 属性跨越了<strong>\&lt;img></strong> 标签，漂洋过海地把外层的 <strong>noframes</strong> 标签给闭合了？难道说，<strong>\&lt;noframes></strong> 标签有一种特殊的魔力。它的闭合优先级，高于双引号的完整性优先级，高于嵌套在内层的标签的闭合优先级。</p>
 <p>还有其他标签也有这样的魔力么？我们 fuzz 一下看看。</p>
 <h2 id="fuzz-找找"><a href="#fuzz-找找" class="headerlink" title="fuzz 找找"></a>fuzz 找找</h2><p>从 w3school 找到所有的 HTML 标签：</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png" alt="04-w3school-tags"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png" alt="04-w3school-tags"></p>
 <p>整理成 tags.txt。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/05-tags-txt.png" alt="05-tags-txt"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/05-tags-txt.png" alt="05-tags-txt"></p>
 <p>按照前述 noframes 的格式，依次把他们输出到 show.html 中。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/06-showtag-py.png" alt="06-showtag-py"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/06-showtag-py.png" alt="06-showtag-py"></p>
 <p>执行，打开 show.html 看看效果。</p>
-<p><img src="http://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png" alt="07-show-all-tag"></p>
+<p><img src="https://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png" alt="07-show-all-tag"></p>
 <p>现在我们知道，这些标签都是闭合优先级高于双引号完整性优先级的特殊标签。</p>
 <ul>
 <li>\&lt;!–</li>
