@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.yaowendao.com/2021/10/24/MySQL_CVE-2021-2471_POC/</loc>
+    
+    <lastmod>2021-10-24T14:09:41.106Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.yaowendao.com/2020/03/07/%E6%97%A5%E5%BF%97%E5%BA%93logback%E7%9A%84%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84/</loc>
     
     <lastmod>2020-11-22T18:07:37.887Z</lastmod>
