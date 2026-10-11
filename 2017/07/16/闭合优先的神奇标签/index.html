@@ -81,33 +81,34 @@
 
 
 
-<meta name="description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta name="keywords" content="闭合优先,HTML">
+<meta name="description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 &lt;&#x2F;noframes&gt;，跳过了 &lt;img&gt; 标签和 src 属性，把外层的 &lt;noframes&gt; 给闭合了，导致 src 后半部分的 script 标签被解析成">
 <meta property="og:type" content="article">
 <meta property="og:title" content="闭合优先的神奇标签">
-<meta property="og:url" content="http://www.yaowendao.com/2017/07/16/闭合优先的神奇标签/index.html">
+<meta property="og:url" content="http://www.yaowendao.com/2017/07/16/%E9%97%AD%E5%90%88%E4%BC%98%E5%85%88%E7%9A%84%E7%A5%9E%E5%A5%87%E6%A0%87%E7%AD%BE/index.html">
 <meta property="og:site_name" content="闻道解惑">
-<meta property="og:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/03-noframes-src.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/05-tags-txt.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/06-showtag-py.png">
-<meta property="og:image" content="https://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png">
-<meta property="og:updated_time" content="2020-11-22T18:07:37.812Z">
+<meta property="og:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 &lt;&#x2F;noframes&gt;，跳过了 &lt;img&gt; 标签和 src 属性，把外层的 &lt;noframes&gt; 给闭合了，导致 src 后半部分的 script 标签被解析成">
+<meta property="og:locale">
+<meta property="og:image" content="http://www.yaowendao.com/image/01-noframes-html.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/02-noframes-alert.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/03-noframes-src.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/04-w3school-tags.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/05-tags-txt.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/06-showtag-py.png">
+<meta property="og:image" content="http://www.yaowendao.com/image/07-show-all-tag.png">
+<meta property="article:published_time" content="2017-07-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-10T09:48:48.431Z">
+<meta property="article:author" content="香依香偎">
+<meta property="article:tag" content="HTML">
+<meta property="article:tag" content="闭合优先">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="闭合优先的神奇标签">
-<meta name="twitter:description" content="来源：香依香偎@闻道解惑 noframes先看一段 HTML：  不过是展示了一张图片而已。用浏览器打开看看。  咦？怎么弹框了？看看浏览器处理的源码。  原来，img 标签 src 属性里的 \&amp;lt;/noframes&amp;gt;，跳过了 \&amp;lt;img&amp;gt; 标签和 src 属性，把外层的 \&amp;lt;noframes&amp;gt; 给闭合了，导致 src 后半部分的 script 标签被解析成了 HTML，从而触发">
-<meta name="twitter:image" content="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png">
+<meta name="twitter:image" content="http://www.yaowendao.com/image/01-noframes-html.png">
 
 
 
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -146,7 +147,7 @@
 
 
 
-</head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -253,7 +254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2017/07/16/闭合优先的神奇标签/">
+    <link itemprop="mainEntityOfPage" href="http://www.yaowendao.com/2017/07/16/%E9%97%AD%E5%90%88%E4%BC%98%E5%85%88%E7%9A%84%E7%A5%9E%E5%A5%87%E6%A0%87%E7%AD%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="香依香偎">
@@ -320,35 +321,35 @@
       
 
       
-        <p>来源：<a href="https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw" target="_blank" rel="noopener">香依香偎@闻道解惑</a></p>
+        <p>来源：<a href="https://mp.weixin.qq.com/s/2Ta51yWBPiM2YVDl1mSVBw">香依香偎@闻道解惑</a></p>
 <h2 id="noframes"><a href="#noframes" class="headerlink" title="noframes"></a>noframes</h2><p>先看一段 HTML：</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/01-noframes-html.png" alt="01-noframes-html"></p>
+<p><img src="/image/01-noframes-html.png" alt="01-noframes-html"></p>
 <p>不过是展示了一张图片而已。用浏览器打开看看。</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/02-noframes-alert.png" alt="02-noframes-alert"></p>
+<p><img src="/image/02-noframes-alert.png" alt="02-noframes-alert"></p>
 <p>咦？怎么弹框了？看看浏览器处理的源码。</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/03-noframes-src.png" alt="03-noframes-src"></p>
-<p>原来，<strong>img</strong> 标签 <strong>src</strong> 属性里的 <strong>\&lt;/noframes></strong>，跳过了 <strong>\&lt;img></strong> 标签和 <strong>src</strong> 属性，把外层的 <strong>\&lt;noframes></strong> 给闭合了，导致 <strong>src</strong> 后半部分的 <strong>script</strong> 标签被解析成了 HTML，从而触发了弹框。</p>
-<p>这可奇怪了。<strong>\&lt;/noframes></strong> 明明在双引号里面，怎么就跨越了<strong>src</strong> 属性跨越了<strong>\&lt;img></strong> 标签，漂洋过海地把外层的 <strong>noframes</strong> 标签给闭合了？难道说，<strong>\&lt;noframes></strong> 标签有一种特殊的魔力。它的闭合优先级，高于双引号的完整性优先级，高于嵌套在内层的标签的闭合优先级。</p>
+<p><img src="/image/03-noframes-src.png" alt="03-noframes-src"></p>
+<p>原来，<strong>img</strong> 标签 <strong>src</strong> 属性里的 <strong>&lt;&#x2F;noframes&gt;</strong>，跳过了 <strong>&lt;img&gt;</strong> 标签和 <strong>src</strong> 属性，把外层的 <strong>&lt;noframes&gt;</strong> 给闭合了，导致 <strong>src</strong> 后半部分的 <strong>script</strong> 标签被解析成了 HTML，从而触发了弹框。</p>
+<p>这可奇怪了。<strong>&lt;&#x2F;noframes&gt;</strong> 明明在双引号里面，怎么就跨越了<strong>src</strong> 属性跨越了**&lt;img&gt;** 标签，漂洋过海地把外层的 <strong>noframes</strong> 标签给闭合了？难道说，<strong>&lt;noframes&gt;</strong> 标签有一种特殊的魔力。它的闭合优先级，高于双引号的完整性优先级，高于嵌套在内层的标签的闭合优先级。</p>
 <p>还有其他标签也有这样的魔力么？我们 fuzz 一下看看。</p>
 <h2 id="fuzz-找找"><a href="#fuzz-找找" class="headerlink" title="fuzz 找找"></a>fuzz 找找</h2><p>从 w3school 找到所有的 HTML 标签：</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/04-w3school-tags.png" alt="04-w3school-tags"></p>
+<p><img src="/image/04-w3school-tags.png" alt="04-w3school-tags"></p>
 <p>整理成 tags.txt。</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/05-tags-txt.png" alt="05-tags-txt"></p>
+<p><img src="/image/05-tags-txt.png" alt="05-tags-txt"></p>
 <p>按照前述 noframes 的格式，依次把他们输出到 show.html 中。</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/06-showtag-py.png" alt="06-showtag-py"></p>
+<p><img src="/image/06-showtag-py.png" alt="06-showtag-py"></p>
 <p>执行，打开 show.html 看看效果。</p>
-<p><img src="https://yaowendao.cn-bj.ufileos.com/07-show-all-tag.png" alt="07-show-all-tag"></p>
+<p><img src="/image/07-show-all-tag.png" alt="07-show-all-tag"></p>
 <p>现在我们知道，这些标签都是闭合优先级高于双引号完整性优先级的特殊标签。</p>
 <ul>
-<li>\&lt;!–</li>
-<li>\&lt;iframe></li>
-<li>\&lt;noframes></li>
-<li>\&lt;noscript></li>
-<li>\&lt;script></li>
-<li>\&lt;style></li>
-<li>\&lt;textarea></li>
-<li>\&lt;title></li>
-<li>\&lt;xmp></li>
+<li>&lt;!–</li>
+<li>&lt;iframe&gt;</li>
+<li>&lt;noframes&gt;</li>
+<li>&lt;noscript&gt;</li>
+<li>&lt;script&gt;</li>
+<li>&lt;style&gt;</li>
+<li>&lt;textarea&gt;</li>
+<li>&lt;title&gt;</li>
+<li>&lt;xmp&gt;</li>
 </ul>
 <h2 id="攻击场景"><a href="#攻击场景" class="headerlink" title="攻击场景"></a>攻击场景</h2><p>这个特性出现的原因，可能是源于浏览器对 <strong>DOM</strong> 树的特殊处理。而在某些 <strong>XSS</strong> 攻击的场景下，这一特性可能导致意想不到的结果。</p>
 <p>特别是，像邮箱或论坛等支持富文本的应用，出于防御 <strong>XSS</strong> 的考虑，一定会对用户的输入进行语法分析和检查。但是，如果语法分析的结果和浏览器的识别结果不一致的话，就会形成 <strong>XSS</strong> 的攻击点。</p>
@@ -371,7 +372,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/闭合优先/" rel="tag"># 闭合优先</a>
+            <a href="/tags/%E9%97%AD%E5%90%88%E4%BC%98%E5%85%88/" rel="tag"># 闭合优先</a>
           
             <a href="/tags/HTML/" rel="tag"># HTML</a>
           
@@ -392,7 +393,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/11/fastjson反序列化漏洞POC分析/" rel="prev" title="fastjson 反序列化漏洞POC分析">
+              <a href="/2017/12/11/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9EPOC%E5%88%86%E6%9E%90/" rel="prev" title="fastjson 反序列化漏洞POC分析">
                 fastjson 反序列化漏洞POC分析 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -475,7 +476,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -488,7 +489,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -521,7 +522,7 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="https://weibo.com/gigabyte" target="_blank" title="Weibo">
+                    <a href="https://weibo.com/u/1410725371" target="_blank" title="Weibo">
                       
                         <i class="fa fa-fw fa-weibo"></i>Weibo</a>
                   </span>
@@ -550,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#noframes"><span class="nav-number">1.</span> <span class="nav-text">noframes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fuzz-找找"><span class="nav-number">2.</span> <span class="nav-text">fuzz 找找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击场景"><span class="nav-number">3.</span> <span class="nav-text">攻击场景</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#noframes"><span class="nav-number">1.</span> <span class="nav-text">noframes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fuzz-%E6%89%BE%E6%89%BE"><span class="nav-number">2.</span> <span class="nav-text">fuzz 找找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E5%9C%BA%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text">攻击场景</span></a></li></ol></div>
             
 
           </div>
@@ -570,7 +571,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
